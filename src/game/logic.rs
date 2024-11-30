@@ -1,14 +1,13 @@
 use std::sync::Arc;
 
 use ggez::event::EventHandler;
-use ggez::input::keyboard::KeyCode;
+use ggez::input::keyboard::{KeyCode, KeyInput};
 use ggez::graphics::{Canvas, Color};
 use ggez::{Context, GameResult};
 
 use crate::classes::platform::Platform;
 use crate::classes::player::Player;
 use crate::config::Config;
-use crate::physics::collision::Collidable;
 
 pub struct Game {
     pub player: Player,
@@ -27,7 +26,6 @@ impl Game {
     fn handle_player_input(&mut self, input: KeyCode) -> GameResult {
         match input {
             KeyCode::Up | KeyCode::W => self.player.jump(),
-            KeyCode::Down | KeyCode::S => self.player.fall(),
             KeyCode::Left | KeyCode::A => self.player.move_left(),
             KeyCode::Right | KeyCode::D => self.player.move_right(),
             _ => Ok(()),
@@ -37,17 +35,7 @@ impl Game {
 
 impl EventHandler for Game {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        for p in &self.platforms {
-            if self.player.pos.is_on_top_of(&p.get_pos()) {
-                println!("top")
-            }
-            if p.get_pos().is_on_top_of(&self.player.pos) {
-                println!("down")
-            }
-            if p.get_pos().is_colliding_with(&self.player.pos) {
-                println!("collision")
-            }
-        }
+        self.player.update( &self.platforms)?;
         if self.quitted {
             self.quit_event(_ctx)?;
         }
@@ -63,14 +51,19 @@ impl EventHandler for Game {
         canvas.finish(ctx)
     }
 
-    fn key_down_event(
-        &mut self,
-        _ctx: &mut Context,
-        input: ggez::input::keyboard::KeyInput,
-        _repeat: bool,
-    ) -> GameResult {
+    fn key_down_event(&mut self, _ctx: &mut Context, input: ggez::input::keyboard::KeyInput, _repeat: bool) -> GameResult {
         if let Some(key) = input.keycode {
             self.handle_player_input(key)?;
+        }
+        Ok(())
+    }
+
+    fn key_up_event(&mut self, _ctx: &mut Context, input: KeyInput) -> GameResult {
+        if let Some(key) = input.keycode {
+            match key {
+                KeyCode::Left | KeyCode::A | KeyCode::Right | KeyCode::D => self.player.stop()?,
+                _ => (),
+            };
         }
         Ok(())
     }

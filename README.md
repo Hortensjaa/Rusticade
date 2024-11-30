@@ -7,19 +7,19 @@ Celem gry jest zawsze zebranie jak największej liczby punktów, bo gra sie gene
 Użytkownik silnika może też dodawać do gry itemy (leczenie, zatrucie, przyspieszenie itd.), które mają wpływ na stan gracza i npc (wrogów i przyjaciół).
 
 ## MVP
-[x] poruszanie sie gracza w prozni bez fizyki
-[x] generowanie platform
-[ ] kolizja gracza i platformy
-[ ] fizyka ruchu gracza (uuggghhh)
-[ ] przeniesienie consts jako dostępne dla użytkownika
-[ ] rodzaje kamery gracza (dynamic, fixedX, fixedY)
-[ ] ruch domyślny dla gracza (np. bieg do przodu, grawitacja)
+- [x] poruszanie sie gracza w prozni bez fizyki
+- [x] generowanie platform
+- [x] kolizja gracza i platformy
+- [ ] fizyka ruchu gracza (uuggghhh)
+- [ ] przeniesienie consts jako dostępne dla użytkownika
+- [ ] rodzaje kamery gracza (dynamic, fixedX, fixedY)
+- [ ] ruch domyślny dla gracza (np. bieg do przodu, grawitacja)
 
 ## Rozwinięcie
 - itemy
 - efekty specjalne (spowolnienie przez określony czas, zatrucie itd.)
-- nieskonczone generowanie platform (możliwość dla gracza)
 
 ## Dodatki
 - dodawanie graczowi własnych pól (np. pieniędzy)
 - przyjaciele i wrogowie
+- nieskonczone generowanie platform (możliwość dla gracza)

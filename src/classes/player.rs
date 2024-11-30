@@ -4,7 +4,8 @@ use ggez::GameError;
 
 use crate::config::Config;
 
-use super::super::physics::dynamic_player::DynamicPlayer;
+use crate::physics::dynamic_player::DynamicPlayer;
+use super::platform::Platform;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Player {
@@ -14,27 +15,32 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, hp: u16, config: Arc<Config>) -> Self {
-        Player { pos: DynamicPlayer::new(x, y, w, h, speed, jump, config), hp, score: 0}
+    pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32, hp: u16, config: Arc<Config>) -> Self {
+        Player { pos: DynamicPlayer::new(x, y, w, h, speed, jump, delta_time, config), hp, score: 0}
     }
 
-    pub fn move_right(&mut self) -> Result<(), GameError>{
-        self.pos.move_right(1.0);
+    pub fn update(&mut self, platforms: &[Platform]) -> Result<(), GameError> {
+        self.pos.update( platforms);
+        Ok(())
+    }
+
+    pub fn stop(&mut self) -> Result<(), GameError> {
+        self.pos.stop();
+        Ok(())
+    }
+
+    pub fn move_right(&mut self) -> Result<(), GameError> {
+        self.pos.move_right();
         Ok(())
     }
 
     pub fn move_left(&mut self) -> Result<(), GameError> {
-        self.pos.move_left(1.0);
+        self.pos.move_left();
         Ok(())
     }
 
     pub fn jump(&mut self) -> Result<(), GameError>{
-        self.pos.jump(1.0);
-        Ok(())
-    }
-
-    pub fn fall(&mut self) -> Result<(), GameError>{
-        self.pos.fall(1.0);
+        self.pos.jump();
         Ok(())
     }
 

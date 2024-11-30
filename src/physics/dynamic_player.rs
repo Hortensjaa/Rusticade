@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::config::Config;
+use crate::{classes::platform::Platform, config::Config};
 
 use super::collision::Collidable;
 
@@ -10,39 +10,63 @@ pub struct DynamicPlayer {
     pub y: f32,
     pub w: f32,
     pub h: f32,
-    speed: f32,
-    jump: f32,
+    vx: f32,
+    vy: f32,
+    on_ground: bool,
+    pub speed: f32,
+    pub jump: f32,
+    pub delta_time: f32,
     config: Arc<Config>
 }
 
 
 impl DynamicPlayer {
-    pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, config: Arc<Config>) -> Self {
-        DynamicPlayer{x, y, w, h, speed, jump, config}
+    pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32, config: Arc<Config>) -> Self {
+        DynamicPlayer{x, y, w, h, speed, jump, config, delta_time, ..DynamicPlayer::default()}
     }
 
-    pub fn move_right(&mut self, steps: f32) {
-        self.x = (self.x + steps * self.speed).min(self.config.screen_width - self.w);
+    pub fn update(&mut self, platforms: &[Platform]) {
+        if !self.on_ground {
+            self.vy += self.config.gravity * self.delta_time;
+        }
+
+        self.x += self.vx * self.delta_time;
+        self.y += self.vy * self.delta_time;
+
+        let epsilon = self.vy.abs() * self.delta_time + 0.1;
+        self.on_ground = false;
+        for platform in platforms {
+            if self.is_on_top_of(&platform.get_pos(), epsilon) {
+                self.y = platform.get_pos().get_position().1 - self.h; 
+                self.vy = 0.0;
+                self.on_ground = true;
+                break;
+            }
+        }
+
+        self.x = self.x.clamp(0.0, self.config.screen_width - self.w);
+        self.y = self.y.clamp(0.0, self.config.screen_height - self.h);
     }
 
-    pub fn move_left(&mut self, steps: f32) {
-        self.x = (self.x - steps * self.speed).max(0.0);
+    pub fn jump(&mut self) {
+        let epsilon = self.vy.abs() * self.delta_time + 0.1;
+        if self.on_ground {
+            self.vy = -self.jump; 
+            self.y -= epsilon;
+            self.on_ground = false;
+        }
     }
 
-    pub fn jump(&mut self, steps: f32) {
-        self.y = (self.y - steps * self.jump).max(0.0); // to be changed
+    pub fn move_left(&mut self) {
+        self.vx = -self.speed;
     }
 
-    pub fn fall(&mut self, steps: f32) {
-        self.y = (self.y + steps * self.config.gravity).min(self.config.screen_height as f32 - self.h); // to be deleted
+    pub fn move_right(&mut self) {
+        self.vx = self.speed;
     }
 
-    pub fn _change_speed(&mut self, multiplier: f32) {
-        self.speed *= multiplier;
-    }
-
-    pub fn _change_jump(&mut self, multiplier: f32) {
-        self.jump *= multiplier;
+    pub fn stop(&mut self) {
+        self.vx = 0.0;
     }
 }
 
@@ -53,8 +77,12 @@ impl Default for DynamicPlayer {
             y: 0.0,
             w: 50.0,
             h: 50.0,
-            speed: 25.0,
-            jump: 25.0,
+            vx: 0.0,
+            vy: 0.0,
+            on_ground: false,
+            speed: 100.0,
+            jump: 300.0,
+            delta_time: 1.0 / 50.0,
             config: Arc::new(Config::default())
         }
     }

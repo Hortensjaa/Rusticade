@@ -23,7 +23,7 @@ impl Default for Config {
             screen_height: 600.0,
             grid_cell_width: 50.0,
             grid_cell_height: 50.0,
-            gravity: 50.0,
+            gravity: 400.0,
             fixed_x: false,
             fixed_y: false,
         }
