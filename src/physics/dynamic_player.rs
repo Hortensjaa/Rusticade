@@ -36,8 +36,8 @@ impl DynamicPlayer {
         let epsilon = self.vy.abs() * self.delta_time + 0.1;
         self.on_ground = false;
         for platform in platforms {
-            if self.is_on_top_of(&platform.get_pos(), epsilon) {
-                self.y = platform.get_pos().get_position().1 - self.h; 
+            if self.is_on_top_of(&platform.pos, epsilon) {
+                self.y = platform.pos.get_position().1 - self.h; 
                 self.vy = 0.0;
                 self.on_ground = true;
                 break;
@@ -46,10 +46,13 @@ impl DynamicPlayer {
 
         self.x = self.x.clamp(0.0, self.config.screen_width - self.w);
         self.y = self.y.clamp(0.0, self.config.screen_height - self.h);
+        if self.y == self.config.screen_height - self.h {
+            self.on_ground = true
+        }
     }
 
     pub fn jump(&mut self) {
-        let epsilon = self.vy.abs() * self.delta_time + 0.1;
+        let epsilon = self.vy.abs() * self.delta_time + 1.0;
         if self.on_ground {
             self.vy = -self.jump; 
             self.y -= epsilon;
@@ -81,8 +84,8 @@ impl Default for DynamicPlayer {
             vy: 0.0,
             on_ground: false,
             speed: 100.0,
-            jump: 300.0,
-            delta_time: 1.0 / 50.0,
+            jump: 400.0,
+            delta_time: 1.0 / 40.0,
             config: Arc::new(Config::default())
         }
     }

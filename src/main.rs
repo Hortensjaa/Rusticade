@@ -20,9 +20,8 @@ fn main() -> GameResult {
     game.add_platform_default_size(100.0, 100.0);
     game.add_platform_default_size(100.0, 200.0);
     game.add_platform_default_size(50.0, 50.0);
-    game.add_platform(0.0, 550.0, 600.0, 50.0);
+    game.add_platform_custom_size(0.0, 550.0, 600.0, 50.0);
     game.add_finish_platform(100.0, 200.0, 100.0, 20.0);
-    game.add_platform_with_effect(200.0, 400.0, |mut p: Player| {let _ = p.heal(20);});
 
     event::run(ctx, event_loop, game)
 }

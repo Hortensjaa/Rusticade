@@ -1,7 +1,7 @@
 use ggez::{graphics::{self, Color, DrawMode, Mesh}, Context, GameResult};
 
 use super::logic::Game;
-use crate::classes::platform::Platform;
+
 
 impl Game {
 
@@ -31,23 +31,9 @@ impl Game {
 
     pub(super) fn draw_platforms(&self, ctx: &mut Context, canvas: &mut graphics::Canvas) -> GameResult {
         for p in &self.platforms {
-            let platform_mesh = match p {
-                Platform::Normal(pos) => {
-                    let color = graphics::Color::from_rgb(0, 0, 255);
-                    self.create_platform(ctx, pos.x, pos.y, pos.w, pos.h, color)?
-                },
-                Platform::Special(pos, _) => {
-                    let color = graphics::Color::from_rgb(0, 255, 0);
-                    self.create_platform(ctx, pos.x, pos.y, pos.w, pos.h, color)?
-                },
-                Platform::Finish(pos, _) => {
-                    let color = graphics::Color::from_rgb(255, 0, 0);
-                    self.create_platform(ctx, pos.x, pos.y, pos.w, pos.h, color)?
-                },
-            };
-    
+            let platform_mesh = self.create_platform(ctx, p.pos.x, p.pos.y, p.pos.w, p.pos.h, Color::CYAN)?;
             canvas.draw(&platform_mesh, graphics::DrawParam::default());
-        }
+        };
         Ok(())
     }
 }

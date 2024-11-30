@@ -1,16 +1,16 @@
 use super::collision::Collidable;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct DynamicObject{
+pub struct StaticObject{
     pub x: f32,
     pub y: f32,
     pub w: f32,
     pub h: f32,
 }
 
-impl Default for DynamicObject {
+impl Default for StaticObject {
     fn default() -> Self {
-        DynamicObject {
+        StaticObject {
             x: 0.0,
             y: 0.0,
             w: 50.0,
@@ -19,7 +19,7 @@ impl Default for DynamicObject {
     }
 }
 
-impl Collidable for DynamicObject {
+impl Collidable for StaticObject {
     fn get_position(&self) -> (f32, f32) {
         (self.x, self.y)
     }
