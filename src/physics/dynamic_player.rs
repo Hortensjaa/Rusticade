@@ -2,6 +2,8 @@ use std::sync::Arc;
 
 use crate::config::Config;
 
+use super::collision::Collidable;
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct DynamicPlayer {
     pub x: f32,
@@ -55,5 +57,15 @@ impl Default for DynamicPlayer {
             jump: 25.0,
             config: Arc::new(Config::default())
         }
+    }
+}
+
+impl Collidable for DynamicPlayer {
+    fn get_position(&self) -> (f32, f32) {
+        (self.x, self.y)
+    }
+
+    fn get_size(&self) -> (f32, f32) {
+        (self.w, self.h)
     }
 }

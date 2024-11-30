@@ -28,6 +28,14 @@ impl Platform {
         };
         Platform::Finish(pos, effect)
     }
+
+    pub fn get_pos(&self) ->  DynamicObject {
+        match self {
+            Platform::Normal(pos) => pos.clone(),
+            Platform::Special(pos, _ ) => pos.clone(),
+            Platform::Finish(pos, _ ) => pos.clone()
+        }
+    } 
 }
 
 

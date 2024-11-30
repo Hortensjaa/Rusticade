@@ -38,12 +38,14 @@ impl Player {
         Ok(())
     }
 
-    fn heal(&mut self) -> Result<(), GameError>{
-        unimplemented!()
+    pub fn heal(&mut self, points: u16) -> Result<(), GameError>{
+        self.hp += points;
+        Ok(())
     }
 
-    fn take_damage(&mut self) -> Result<(), GameError>{
-        unimplemented!()
+    pub fn take_damage(&mut self, points: u16) -> Result<(), GameError>{
+        self.hp -= points;
+        Ok(())
     }
 
 }

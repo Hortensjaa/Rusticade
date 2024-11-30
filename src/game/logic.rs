@@ -8,6 +8,7 @@ use ggez::{Context, GameResult};
 use crate::classes::platform::Platform;
 use crate::classes::player::Player;
 use crate::config::Config;
+use crate::physics::collision::Collidable;
 
 pub struct Game {
     pub player: Player,
@@ -36,6 +37,17 @@ impl Game {
 
 impl EventHandler for Game {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
+        for p in &self.platforms {
+            if self.player.pos.is_on_top_of(&p.get_pos()) {
+                println!("top")
+            }
+            if p.get_pos().is_on_top_of(&self.player.pos) {
+                println!("down")
+            }
+            if p.get_pos().is_colliding_with(&self.player.pos) {
+                println!("collision")
+            }
+        }
         if self.quitted {
             self.quit_event(_ctx)?;
         }
