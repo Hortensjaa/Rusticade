@@ -8,7 +8,7 @@ use std::sync::Arc;
 use config::Config;
 use ggez::{event, GameResult};
 use game::context::create_game_context;
-use game::game::Game;
+use game::logic::Game;
 
 
 fn main() -> GameResult {
@@ -19,6 +19,8 @@ fn main() -> GameResult {
     game.add_platform_default_size(100.0, 100.0);
     game.add_platform_default_size(100.0, 200.0);
     game.add_platform_default_size(50.0, 50.0);
+    game.add_platform(0.0, 550.0, 800.0, 50.0);
+    game.add_finish_platform(100.0, 200.0, 100.0, 20.0);
 
     event::run(ctx, event_loop, game)
 }
