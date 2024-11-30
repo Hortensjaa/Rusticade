@@ -1,0 +1,9 @@
+[package]
+name = "projekt"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ggez = "0.9"
+nalgebra = "0.29"
+nanorand = "0.7"
