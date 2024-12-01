@@ -17,8 +17,7 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(config: Arc<Config>) -> GameResult<Self> {
-        let player = Player::default();
+    pub fn new(player: Player, config: Arc<Config>) -> GameResult<Self> {
         let platforms = Vec::new();
         Ok(Self { player, platforms, config, quitted: false })
     }
@@ -70,6 +69,17 @@ impl EventHandler for Game {
 
     fn quit_event(&mut self, _ctx: &mut Context) -> Result<bool, ggez::GameError> {
         Ok(false)
+    }
+}
+
+impl Default for Game {
+    fn default() -> Self {
+        Game {
+            player: Player::default(),
+            platforms: Vec::new(),
+            config: Arc::new(Config::default()),
+            quitted: false
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use ggez::{event::EventLoop, ContextBuilder, GameResult, conf::{WindowMode, WindowSetup}};
+use crate::config::Config;
 
 pub fn game_context(
     name: &str,
@@ -39,4 +40,3 @@ macro_rules! create_game_context {
 
 pub(crate) use create_game_context;
 
-use crate::config::Config;

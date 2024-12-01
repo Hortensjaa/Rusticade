@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::{classes::platform::Platform, config::Config};
 
-use super::collision::Collidable;
+use super::{collision::Collidable, static_object::StaticObject};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct DynamicPlayer {
@@ -10,13 +10,13 @@ pub struct DynamicPlayer {
     pub y: f32,
     pub w: f32,
     pub h: f32,
-    vx: f32,
-    vy: f32,
-    on_ground: bool,
+    pub vx: f32,
+    pub vy: f32,
+    pub on_ground: bool,
     pub speed: f32,
     pub jump: f32,
     pub delta_time: f32,
-    config: Arc<Config>
+    pub config: Arc<Config>
 }
 
 
@@ -25,7 +25,7 @@ impl DynamicPlayer {
         DynamicPlayer{x, y, w, h, speed, jump, config, delta_time, ..DynamicPlayer::default()}
     }
 
-    pub fn update(&mut self, platforms: &[Platform]) {
+    pub fn update(&mut self, platforms: &[StaticObject]) {
         if !self.on_ground {
             self.vy += self.config.gravity * self.delta_time;
         }
@@ -36,8 +36,8 @@ impl DynamicPlayer {
         let epsilon = self.vy.abs() * self.delta_time + 0.1;
         self.on_ground = false;
         for platform in platforms {
-            if self.is_on_top_of(&platform.pos, epsilon) {
-                self.y = platform.pos.get_position().1 - self.h; 
+            if self.is_on_top_of(platform, epsilon) {
+                self.y = platform.get_position().1 - self.h; 
                 self.vy = 0.0;
                 self.on_ground = true;
                 break;

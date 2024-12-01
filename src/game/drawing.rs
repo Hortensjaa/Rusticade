@@ -1,6 +1,6 @@
 use ggez::{graphics::{self, Color, DrawMode, Mesh}, Context, GameResult};
 
-use super::logic::Game;
+use super::game::Game;
 
 
 impl Game {

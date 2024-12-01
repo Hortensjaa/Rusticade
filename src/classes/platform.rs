@@ -1,40 +1,33 @@
-use crate::{classes::player::Player, game::logic::Game, physics::static_object::StaticObject};
+use crate::{classes::player::Player, game::game::Game, physics::static_object::StaticObject};
 
 use super::directions::Direction;
-
 
 pub struct Platform {
     // position 
     pub pos: StaticObject,
 
-    // collisions
-    top_collision: bool,
-    bottom_collision: bool,
-    right_collision: bool,
-    left_collision: bool,
-
     // action when touching platform from any direction
-    on_top: Option<Box<dyn FnMut(&mut Game, Player)>>,
-    on_bottom: Option<Box<dyn FnMut(&mut Game, Player)>>,
-    on_right: Option<Box<dyn FnMut(&mut Game, Player)>>,
-    on_left: Option<Box<dyn FnMut(&mut Game, Player)>>,
-    on_collision: Option<Box<dyn FnMut(&mut Game, Player)>>
+    pub on_top: Option<Box<dyn FnMut(&mut Game, Player)>>,
+    pub on_bottom: Option<Box<dyn FnMut(&mut Game, Player)>>,
+    pub on_right: Option<Box<dyn FnMut(&mut Game, Player)>>,
+    pub on_left: Option<Box<dyn FnMut(&mut Game, Player)>>,
+    pub on_collision: Option<Box<dyn FnMut(&mut Game, Player)>>
 }
 
 impl Platform {
     pub fn new(x: f32, y: f32, w: f32, h: f32) -> Self {
         let pos = StaticObject{
-            x, y, w, h, 
+            x, y, w, h, ..StaticObject::default()
         };
         Platform{pos, ..Platform::default()}
     }
     
     pub fn set_collision(&mut self, direction: Direction, collision: bool) {
         match direction {
-            Direction::Left => {self.left_collision = collision},
-            Direction::Right => {self.right_collision = collision},
-            Direction::Top => {self.top_collision = collision},
-            Direction::Bottom => {self.bottom_collision = collision},
+            Direction::Left => {self.pos.left_collision = collision},
+            Direction::Right => {self.pos.right_collision = collision},
+            Direction::Top => {self.pos.top_collision = collision},
+            Direction::Bottom => {self.pos.bottom_collision = collision},
             _ => {}
         }
     }
@@ -55,11 +48,6 @@ impl Default for Platform {
     fn default() -> Self {
         Platform {
             pos: StaticObject::default(),
-
-            top_collision: true,
-            bottom_collision: false,
-            right_collision: false,
-            left_collision: false,
 
             on_top: None,
             on_bottom: None,

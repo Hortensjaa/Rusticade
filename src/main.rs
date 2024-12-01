@@ -5,18 +5,19 @@ mod config;
 
 use std::sync::Arc;
 
-use classes::player::Player;
+use classes::player::create_player;
 use config::Config;
 use ggez::{event, GameResult};
 use game::context::create_game_context;
-use game::logic::Game;
+use game::game::Game;
 
 
 fn main() -> GameResult {
     let config = Arc::new(Config::default());
     let (ctx, event_loop) = create_game_context!("Moja gra", "Julia Kulczycka", config.clone())?;
 
-    let mut game = Game::new(config.clone())?;
+    let player = create_player!(100.0, 200.0, 400.0, 10.0, config.clone());
+    let mut game = Game::new(player, config.clone())?;
     game.add_platform_default_size(100.0, 100.0);
     game.add_platform_default_size(100.0, 200.0);
     game.add_platform_default_size(50.0, 50.0);

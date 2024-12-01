@@ -1,6 +1,6 @@
 use crate::classes::{directions::Direction, platform::Platform, player::Player};
 
-use super::logic::Game;
+use super::game::Game;
 
 impl Game {
 

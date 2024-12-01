@@ -1,4 +1,4 @@
 pub mod platforms;
-pub mod logic;
+pub mod game;
 pub mod context;
 pub mod drawing;
