@@ -11,7 +11,7 @@ use super::platform::Platform;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Player {
-    pub pos: DynamicPlayer,
+    pub physics: DynamicPlayer,
     pub hp: f32,
     pub score: f32,
     props: HashMap<String, f32> // properties that might be added by user (e.g. coins, stamina itd.)
@@ -19,32 +19,32 @@ pub struct Player {
 
 impl Player {
     pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32, hp: f32, config: Arc<Config>) -> Self {
-        Player { pos: DynamicPlayer::new(x, y, w, h, speed, jump, delta_time, config), hp, score: 0.0, props: HashMap::new()}
+        Player { physics: DynamicPlayer::new(x, y, w, h, speed, jump, delta_time, config), hp, score: 0.0, props: HashMap::new()}
     }
 
     pub fn update(&mut self, platforms: &[Platform]) -> Result<(), GameError> {
-        let static_objects: Vec<StaticObject> = platforms.iter().map(|p| p.pos.clone()).collect();
-        self.pos.update(&static_objects);
+        let static_objects: Vec<StaticObject> = platforms.iter().map(|p| p.physics.clone()).collect();
+        self.physics.update(&static_objects);
         Ok(())
     }
 
     pub fn stop(&mut self) -> Result<(), GameError> {
-        self.pos.stop();
+        self.physics.stop();
         Ok(())
     }
 
     pub fn move_right(&mut self) -> Result<(), GameError> {
-        self.pos.move_right();
+        self.physics.move_right();
         Ok(())
     }
 
     pub fn move_left(&mut self) -> Result<(), GameError> {
-        self.pos.move_left();
+        self.physics.move_left();
         Ok(())
     }
 
     pub fn jump(&mut self) -> Result<(), GameError> {
-        self.pos.jump();
+        self.physics.jump();
         Ok(())
     }
 
@@ -75,7 +75,7 @@ impl Player {
 impl Default for Player {
     fn default() -> Self {
         Player {
-            pos: DynamicPlayer::default(),
+            physics: DynamicPlayer::default(),
             hp: 100.0,
             score: 0.0,
             props: HashMap::new()

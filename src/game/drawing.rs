@@ -9,7 +9,7 @@ impl Game {
         Mesh::new_rectangle(
             ctx,
             DrawMode::fill(),
-            graphics::Rect::new(self.player.pos.x, self.player.pos.y, self.player.pos.w, self.player.pos.h),
+            graphics::Rect::new(self.player.physics.x, self.player.physics.y, self.player.physics.w, self.player.physics.h),
             Color::WHITE,
         )
     }
@@ -31,7 +31,7 @@ impl Game {
 
     pub(super) fn draw_platforms(&self, ctx: &mut Context, canvas: &mut graphics::Canvas) -> GameResult {
         for p in &self.platforms {
-            let platform_mesh = self.create_platform(ctx, p.pos.x, p.pos.y, p.pos.w, p.pos.h, Color::CYAN)?;
+            let platform_mesh = self.create_platform(ctx, p.physics.x, p.physics.y, p.physics.w, p.physics.h, Color::CYAN)?;
             canvas.draw(&platform_mesh, graphics::DrawParam::default());
         };
         Ok(())

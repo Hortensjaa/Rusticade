@@ -4,7 +4,7 @@ use super::directions::Direction;
 
 pub struct Platform {
     // position 
-    pub pos: StaticObject,
+    pub physics: StaticObject,
 
     // action when touching platform from any direction
     pub on_top: Option<Box<dyn FnMut(&mut Game, Player)>>,
@@ -16,19 +16,17 @@ pub struct Platform {
 
 impl Platform {
     pub fn new(x: f32, y: f32, w: f32, h: f32) -> Self {
-        let pos = StaticObject{
+        let physics = StaticObject{
             x, y, w, h, ..StaticObject::default()
         };
-        Platform{pos, ..Platform::default()}
+        Platform{physics, ..Platform::default()}
     }
     
-    pub fn set_collision(&mut self, direction: Direction, collision: bool) {
-        match direction {
-            Direction::Left => {self.pos.left_collision = collision},
-            Direction::Right => {self.pos.right_collision = collision},
-            Direction::Top => {self.pos.top_collision = collision},
-            Direction::Bottom => {self.pos.bottom_collision = collision},
-            _ => {}
+    pub fn set_barrier(&mut self, direction: Direction, locked: bool) {
+        if locked {
+            self.physics.barriers.insert(direction);
+        } else {
+            self.physics.barriers.remove(&direction);
         }
     }
 
@@ -47,7 +45,7 @@ impl Platform {
 impl Default for Platform {
     fn default() -> Self {
         Platform {
-            pos: StaticObject::default(),
+            physics: StaticObject::default(),
 
             on_top: None,
             on_bottom: None,

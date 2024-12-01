@@ -11,6 +11,12 @@ Oraz domyślną implementację fizyki, która:
 - [ ] Zapobiega kolizjom kolizyjnych obiektów
 - [x] Implementuje domyślnie ruchy w obydwie strony z określoną prędkością, skoki, grawitację
 
+### Logika kolizji obiektów fizycznych
+Dwa obiekty statyczne nic nie robią w przypadku kolizji.
+Dwa obiekty dynamiczne ??.
+Obiekt dynamiczny odbija sie od statycznego, jesli statyczny ma zdefiniowanią barierę kolizji z tej strony wpw. przenika.
+Domyślnie, bariera kolizji jest tylko z góry.
+
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki
 - [x] generowanie platform

@@ -1,4 +1,6 @@
-use rusticade::physics::collision::*;
+use std::collections::HashSet;
+
+use rusticade::{classes::directions::Direction::{self, *}, physics::collision::*};
 
 #[derive(Debug)]
 struct TestObject {
@@ -15,6 +17,10 @@ impl Collidable for TestObject {
 
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
+    }
+
+    fn get_barriers(&self) -> HashSet<Direction> {
+        HashSet::from([Top, Left])
     }
 }
 

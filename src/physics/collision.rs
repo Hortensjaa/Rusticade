@@ -1,6 +1,11 @@
+use std::collections::HashSet;
+
+use crate::classes::directions::Direction;
+
 pub trait Collidable {
     fn get_position(&self) -> (f32, f32); 
-    fn get_size(&self) -> (f32, f32);     
+    fn get_size(&self) -> (f32, f32); 
+    fn get_barriers(&self) -> HashSet<Direction>;    
 
     fn is_colliding_with(&self, other: &dyn Collidable) -> bool {
         let (x1, y1) = self.get_position();

@@ -7,10 +7,10 @@ mod tests {
     #[test]
     fn test_default_platform() {
         let platform = Platform::default();
-        assert_eq!(platform.pos.x, 0.0);
-        assert_eq!(platform.pos.y, 0.0);
-        assert_eq!(platform.pos.w, 50.0);
-        assert_eq!(platform.pos.h, 50.0);
+        assert_eq!(platform.physics.x, 0.0);
+        assert_eq!(platform.physics.y, 0.0);
+        assert_eq!(platform.physics.w, 50.0);
+        assert_eq!(platform.physics.h, 50.0);
 
         assert!(platform.on_top.is_none());
         assert!(platform.on_bottom.is_none());
@@ -22,10 +22,10 @@ mod tests {
     #[test]
     fn test_new_platform() {
         let platform = Platform::new(10.0, 20.0, 100.0, 50.0);
-        assert_eq!(platform.pos.x, 10.0);
-        assert_eq!(platform.pos.y, 20.0);
-        assert_eq!(platform.pos.w, 100.0);
-        assert_eq!(platform.pos.h, 50.0);
+        assert_eq!(platform.physics.x, 10.0);
+        assert_eq!(platform.physics.y, 20.0);
+        assert_eq!(platform.physics.w, 100.0);
+        assert_eq!(platform.physics.h, 50.0);
     }
 
     #[test]

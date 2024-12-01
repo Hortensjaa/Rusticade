@@ -1,6 +1,6 @@
-use std::sync::Arc;
+use std::{collections::HashSet, sync::Arc};
 
-use crate::config::Config;
+use crate::{classes::directions::Direction::{self, *}, config::Config};
 
 use super::{collision::Collidable, static_object::StaticObject};
 
@@ -16,13 +16,15 @@ pub struct DynamicPlayer {
     pub speed: f32,
     pub jump: f32,
     pub delta_time: f32,
+    barriers: HashSet<Direction>,
     pub config: Arc<Config>
 }
 
 
 impl DynamicPlayer {
     pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32, config: Arc<Config>) -> Self {
-        DynamicPlayer{x, y, w, h, speed, jump, config, delta_time, ..DynamicPlayer::default()}
+        let barriers = HashSet::from([Left, Right, Top, Bottom, Collision]);
+        DynamicPlayer{x, y, w, h, speed, jump, config, delta_time, barriers, ..DynamicPlayer::default()}
     }
 
     pub fn update(&mut self, platforms: &[StaticObject]) {
@@ -86,6 +88,7 @@ impl Default for DynamicPlayer {
             speed: 100.0,
             jump: 400.0,
             delta_time: 1.0 / 40.0,
+            barriers: HashSet::from([Left, Right, Top, Bottom, Collision]),
             config: Arc::new(Config::default())
         }
     }
@@ -98,5 +101,9 @@ impl Collidable for DynamicPlayer {
 
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
+    }
+
+    fn get_barriers(&self) -> HashSet<Direction> {
+        self.barriers.clone()
     }
 }

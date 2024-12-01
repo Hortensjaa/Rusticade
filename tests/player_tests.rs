@@ -15,8 +15,8 @@ mod tests {
 
         assert_eq!(player.hp, 100.0, "Player HP should be 100.0");
         assert_eq!(player.score, 0.0, "Player score should be 0.0");
-        assert_eq!(player.pos.x, 0.0, "Player X position should be 0.0");
-        assert_eq!(player.pos.y, 0.0, "Player Y position should be 0.0");
+        assert_eq!(player.physics.x, 0.0, "Player X position should be 0.0");
+        assert_eq!(player.physics.y, 0.0, "Player Y position should be 0.0");
     }
 
     #[test]
@@ -37,7 +37,7 @@ mod tests {
         player.move_right().unwrap();
         let _ = player.update(&[]);  
 
-        assert_eq!(player.pos.x, 10.0 + 100.0 * 1.0 / 60.0); 
+        assert_eq!(player.physics.x, 10.0 + 100.0 * 1.0 / 60.0); 
     }
 
     #[test]
@@ -47,7 +47,7 @@ mod tests {
         player.move_left().unwrap();
         let _ = player.update(&[]);  
 
-        assert_eq!(player.pos.x, 10.0 - 100.0 * 1.0 / 60.0);  
+        assert_eq!(player.physics.x, 10.0 - 100.0 * 1.0 / 60.0);  
     }
 
     #[test]

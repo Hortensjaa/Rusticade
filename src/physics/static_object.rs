@@ -1,3 +1,7 @@
+use std::collections::HashSet;
+
+use crate::classes::directions::Direction::{self, *};
+
 use super::collision::Collidable;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -6,12 +10,7 @@ pub struct StaticObject{
     pub y: f32,
     pub w: f32,
     pub h: f32,
-
-    // collisions
-    pub top_collision: bool,
-    pub bottom_collision: bool,
-    pub right_collision: bool,
-    pub left_collision: bool,
+    pub barriers: HashSet<Direction>
 }
 
 impl Default for StaticObject {
@@ -21,10 +20,7 @@ impl Default for StaticObject {
             y: 0.0,
             w: 50.0,
             h: 50.0,
-            top_collision: true,
-            bottom_collision: false,
-            right_collision: false,
-            left_collision: false,
+            barriers: HashSet::from([Top])
         }
     }
 }
@@ -36,5 +32,9 @@ impl Collidable for StaticObject {
 
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
+    }
+
+    fn get_barriers(&self) -> HashSet<Direction> {
+        self.barriers.clone()
     }
 }
