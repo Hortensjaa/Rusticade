@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{classes::platform::Platform, config::Config};
+use crate::config::Config;
 
 use super::{collision::Collidable, static_object::StaticObject};
 

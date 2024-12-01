@@ -1,8 +1,15 @@
 # Jak to ma działać?
-Silnik ma dać możliwość użytkownikowi stworzenia gry w prosty sposób..
-Użytkownik może zdefiniować typy pól (oprócz zwykłych platform), które będzie obsługiwać jego plansza (np. pułapki, miejsca leczenia, windy).
-Gra obsługuje jednego gracza, który ma określoną przez użytkownika liczbę hp (i ewentualnie inne moce?).
-Użytkownik silnika może też dodawać do gry itemy (leczenie, zatrucie, przyspieszenie itd.), które mają wpływ na stan gracza.
+Silnik zbudowany na bazie biblioteki ggez do tworzenia gier.
+Reprezentuje dużo bardziej wysokopoziomowe podejście do projektowania gier platformowych w 2D poprzez gotowe klasy:
+- [x] Config 
+- [x] Game 
+- [x] Player - gracz porusza się zgodnie z prawami fizyki i zasadami kolizji dla określonych obiektów
+- [x] Platform - platformy mogą kolidować z różnych stron i przy uderzeniach z różnych stron mogą wywoływać różne efekty
+- [ ] Item - statyczne obiekty, które wykonują jakieś działanie podczas kolizji i pozniej znikaja
+- [ ] Creature - poruszające się stworzenia, na które również działają prawa fizyki
+Oraz domyślną implementację fizyki, która:
+- [ ] Zapobiega kolizjom kolizyjnych obiektów
+- [x] Implementuje domyślnie ruchy w obydwie strony z określoną prędkością, skoki, grawitację
 
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki
@@ -10,8 +17,6 @@ Użytkownik silnika może też dodawać do gry itemy (leczenie, zatrucie, przysp
 - [x] kolizja gracza i platformy
 - [x] fizyka ruchu gracza (uuggghhh)
 - [x] przeniesienie consts jako dostępne dla użytkownika
-- [ ] rodzaje kamery gracza (dynamic, fixedX, fixedY)
-- [ ] ruch domyślny dla gracza (np. bieg do przodu, grawitacja)
 
 ## Rozwinięcie
 - itemy
@@ -21,3 +26,4 @@ Użytkownik silnika może też dodawać do gry itemy (leczenie, zatrucie, przysp
 - dodawanie graczowi własnych pól (np. pieniędzy)
 - przyjaciele i wrogowie
 - nieskonczone generowanie platform (możliwość dla gracza)
+- rodzaje kamery gracza (dynamic, fixedX, fixedY)

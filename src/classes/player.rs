@@ -114,5 +114,6 @@ macro_rules! create_player {
     };
 }
 
+#[allow(unused_imports)]
 pub(crate) use create_player;
 
