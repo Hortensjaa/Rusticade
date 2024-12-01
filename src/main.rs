@@ -7,7 +7,7 @@ use std::sync::Arc;
 
 use classes::platform::Platform;
 use classes::directions::Direction::*;
-use classes::player::{create_player, Player};
+use classes::player:: Player;
 use config::Config;
 use ggez::{event, GameResult, GameError};
 use game::context::create_game_context;

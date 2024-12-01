@@ -68,8 +68,4 @@ impl Collidable for Platform {
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
     }
-
-    fn get_barriers(&self) -> HashSet<Direction> {
-        self.barriers.clone()
-    }
 }

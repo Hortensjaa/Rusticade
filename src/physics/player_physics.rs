@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use ggez::GameError;
 
 use crate::classes::{directions::Direction::{self, *}, platform::Platform, player::Player};
@@ -17,14 +15,12 @@ pub struct PlayerPhysics {
     pub on_ground: bool,
     pub speed: f32,
     pub jump: f32,
-    pub delta_time: f32,
-    barriers: HashSet<Direction>
+    pub delta_time: f32
 }
 
 impl PlayerPhysics {
         pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32) -> Self {
-        let barriers = HashSet::from([Left, Right, Top, Bottom]);
-        PlayerPhysics{x, y, w, h, speed, jump, delta_time, barriers, ..PlayerPhysics::default()}
+        PlayerPhysics{x, y, w, h, speed, jump, delta_time, ..PlayerPhysics::default()}
     }
 }
 
@@ -126,8 +122,7 @@ impl Default for PlayerPhysics {
             on_ground: false,
             speed: 100.0,
             jump: 400.0,
-            delta_time: 1.0 / 40.0,
-            barriers: HashSet::from([Left, Right, Top, Bottom])
+            delta_time: 1.0 / 40.0
         }
     }
 }
@@ -139,9 +134,5 @@ impl Collidable for Player {
 
     fn get_size(&self) -> (f32, f32) {
         (self.physics.w, self.physics.h)
-    }
-
-    fn get_barriers(&self) -> HashSet<Direction> {
-        self.physics.barriers.clone()
     }
 }

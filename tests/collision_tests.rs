@@ -1,6 +1,4 @@
-use std::collections::HashSet;
-
-use rusticade::{classes::directions::Direction::{self, *}, physics::collision::*};
+use rusticade::physics::collision::*;
 
 #[derive(Debug)]
 struct TestObject {
@@ -18,15 +16,28 @@ impl Collidable for TestObject {
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
     }
-
-    fn get_barriers(&self) -> HashSet<Direction> {
-        HashSet::from([Top, Left])
-    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_basic_positions() {
+        let rect = TestObject {
+            x: 10.0,
+            y: 20.0,
+            w: 30.0,
+            h: 40.0,
+        };
+
+        assert_eq!(rect.left(), 10.0);
+        assert_eq!(rect.right(), 40.0); // 10.0 + 30.0
+        assert_eq!(rect.top(), 20.0);
+        assert_eq!(rect.bottom(), -20.0); // 20.0 - 40.0
+        assert_eq!(rect.center_x(), 25.0); // (10.0 + 30.0/2.0)
+        assert_eq!(rect.center_y(), 0.0); // (20.0 - 40.0/2.0)
+    }
 
     #[test]
     fn test_is_touching_x() {
