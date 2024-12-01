@@ -2,6 +2,7 @@ mod classes;
 mod game;
 mod physics;
 mod config;
+mod graphics;
 
 use std::sync::Arc;
 
@@ -18,7 +19,6 @@ fn main() -> GameResult {
     let config = Arc::new(Config::default());
     let (ctx, event_loop) = create_game_context!("Moja gra", "Julia Kulczycka", config.clone())?;
 
-    // let mut player = create_player!(0.0, 0.0, 50.0, 50.0, config.clone());
     let mut superplatform = Platform::new(250.0, 320.0, 80.0, 80.0);
     superplatform.set_barrier(Bottom, true);
     superplatform.set_action(Bottom, |_p: &mut Player| { Ok(println!("aua moja głowa")) });

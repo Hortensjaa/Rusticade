@@ -6,19 +6,22 @@ use ggez::GameError;
 use crate::config::Config;
 
 use crate::physics::player_physics::PlayerPhysics;
+use crate::graphics::player_graphics::PlayerGraphics;
 
-#[derive(Debug, PartialEq, Clone)]
+
+#[derive(Debug, Clone)]
 pub struct Player {
     pub physics: PlayerPhysics,
     pub hp: f32,
     pub score: f32,
     props: HashMap<String, f32>, // properties that might be added by user (e.g. coins, stamina itd.)
-    pub config: Arc<Config>
+    pub config: Arc<Config>,
+    pub graphics: PlayerGraphics
 }
 
 impl Player {
     pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32, hp: f32, config: Arc<Config>) -> Self {
-        Player { physics: PlayerPhysics::new(x, y, w, h, speed, jump, delta_time), config, hp, score: 0.0, props: HashMap::new()}
+        Player { physics: PlayerPhysics::new(x, y, w, h, speed, jump, delta_time), config, hp, score: 0.0, ..Default::default()}
     }
 
     pub fn heal(&mut self, points: f32) -> Result<(), GameError> {
@@ -52,7 +55,8 @@ impl Default for Player {
             hp: 100.0,
             score: 0.0,
             props: HashMap::new(),
-            config: Arc::new(Config::default())
+            config: Arc::new(Config::default()),
+            graphics: PlayerGraphics::default()
         }
     }
 }

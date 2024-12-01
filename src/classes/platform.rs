@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use ggez::GameError;
 
-use crate::{classes::player::Player, physics::collision::Collidable};
+use crate::{classes::player::Player, graphics::static_graphics::StaticGraphics, physics::collision::Collidable};
 
 use super::directions::Direction::{self, *};
 
@@ -14,7 +14,8 @@ pub struct Platform {
     pub h: f32,
     pub barriers: HashSet<Direction>,
     pub finish_line: bool,
-    pub actions: HashMap<Direction, fn(&mut Player) -> Result<(), GameError>>
+    pub actions: HashMap<Direction, fn(&mut Player) -> Result<(), GameError>>,
+    pub graphics: StaticGraphics
 }
 
 
@@ -55,6 +56,7 @@ impl Default for Platform {
             h: 50.0,
             finish_line: false,
             barriers: HashSet::from([Top]),
+            graphics: StaticGraphics::default(),
             actions: HashMap::new()
         }
     }

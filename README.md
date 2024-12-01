@@ -14,28 +14,30 @@ Te obiekty to:
 - [ ] Item - statyczne obiekty, które wykonują jakieś działanie podczas kolizji i pozniej znikaja
 - [ ] Creature - poruszające się stworzenia, na które również działają prawa fizyki
 Oraz domyślną implementację fizyki, która:
-- [ ] Zapobiega kolizjom kolizyjnych obiektów
+- [x] Zapobiega kolizjom kolizyjnych obiektów
 - [x] Implementuje domyślnie ruchy w obydwie strony z określoną prędkością, skoki, grawitację
 
 ### Logika kolizji obiektów fizycznych
 Dwa obiekty statyczne nic nie robią w przypadku kolizji.
 Dwa obiekty dynamiczne ??.
 Obiekt dynamiczny odbija sie od statycznego, jesli statyczny ma zdefiniowanią barierę kolizji z tej strony wpw. przenika.
-Domyślnie, bariera kolizji jest tylko z góry.
+Domyślnie, bariera kolizji platform jest tylko z góry.
+Itemy nie mają w ogóle kolizji, tym się różnią.
 
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki
-- [x] generowanie platform
 - [x] kolizja gracza i platformy
 - [x] fizyka ruchu gracza (uuggghhh)
 - [x] przeniesienie consts jako dostępne dla użytkownika
+- [ ] grafiki
+- [ ] itemy
+- [ ] dodawanie graczowi własnych pól (np. pieniędzy)
 
 ## Rozwinięcie
-- itemy
-- efekty specjalne (spowolnienie przez określony czas, zatrucie itd.)
+- [ ] efekty specjalne (spowolnienie przez określony czas, zatrucie itd.)
+- [ ] przyjaciele i wrogowie
 
 ## Dodatki
-- dodawanie graczowi własnych pól (np. pieniędzy)
-- przyjaciele i wrogowie
 - nieskonczone generowanie platform (możliwość dla gracza)
 - rodzaje kamery gracza (dynamic, fixedX, fixedY)
+- generowanie platform
