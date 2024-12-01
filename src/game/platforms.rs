@@ -1,3 +1,5 @@
+use ggez::GameError;
+
 use crate::classes::{directions::Direction, platform::Platform, player::Player};
 
 use super::game::Game;
@@ -19,15 +21,12 @@ impl Game {
         );
         self.platforms.push(platform);
     }   
-    
-    fn finish_action(game: &mut Game, _p: Player) {
-            game.quitted = true;
-    }
 
     pub fn add_finish_platform(&mut self, x: f32, y: f32, w: f32, h: f32) {
-        let action = Box::new(|game: &mut Game, player: Player| Game::finish_action(game, player));
         let mut platform = Platform::new(x, y, w, h);
-        platform.set_action(Direction::Collision, action);
+        platform.set_action(Direction::Top, |_p: &mut Player| {
+            Err(GameError::CustomError(String::from("Finish platform action")))
+        });
         self.platforms.push(platform);
     }
 }

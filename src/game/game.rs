@@ -12,14 +12,13 @@ use crate::config::Config;
 pub struct Game {
     pub player: Player,
     pub platforms: Vec<Platform>,
-    pub(super) config: Arc<Config>,
-    pub(super) quitted: bool
+    pub(super) config: Arc<Config>
 }
 
 impl Game {
     pub fn new(player: Player, config: Arc<Config>) -> GameResult<Self> {
         let platforms = Vec::new();
-        Ok(Self { player, platforms, config, quitted: false })
+        Ok(Self { player, platforms, config })
     }
 
     fn handle_player_input(&mut self, input: KeyCode) -> GameResult {
@@ -34,11 +33,14 @@ impl Game {
 
 impl EventHandler for Game {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        self.player.update( &self.platforms)?;
-        if self.quitted {
-            self.quit_event(_ctx)?;
+        let e = self.player.update(&self.platforms);
+        match e {
+            Ok(()) => Ok(()),
+            _ => {
+                _ctx.request_quit();
+                Ok(())
+            }
         }
-        Ok(())
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
@@ -77,8 +79,7 @@ impl Default for Game {
         Game {
             player: Player::default(),
             platforms: Vec::new(),
-            config: Arc::new(Config::default()),
-            quitted: false
+            config: Arc::new(Config::default())
         }
     }
 }

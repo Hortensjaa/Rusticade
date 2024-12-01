@@ -31,7 +31,7 @@ impl Game {
 
     pub(super) fn draw_platforms(&self, ctx: &mut Context, canvas: &mut graphics::Canvas) -> GameResult {
         for p in &self.platforms {
-            let platform_mesh = self.create_platform(ctx, p.physics.x, p.physics.y, p.physics.w, p.physics.h, Color::CYAN)?;
+            let platform_mesh = self.create_platform(ctx, p.x, p.y, p.w, p.h, Color::CYAN)?;
             canvas.draw(&platform_mesh, graphics::DrawParam::default());
         };
         Ok(())

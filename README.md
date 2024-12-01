@@ -1,8 +1,14 @@
 # Jak to ma działać?
 Silnik zbudowany na bazie biblioteki ggez do tworzenia gier.
-Reprezentuje dużo bardziej wysokopoziomowe podejście do projektowania gier platformowych w 2D poprzez gotowe klasy:
+Reprezentuje dużo bardziej wysokopoziomowe podejście do projektowania gier platformowych w 2D poprzez gotowe klasy logiki:
 - [x] Config 
 - [x] Game 
+oraz obiektów na ekranie; każdy obiekt ma swoją: 
+- [x] fizykę (physics) 
+- [ ] grafikę (graphics)
+- [x] dodatkowe opcje zależne od typu np. hp gracza, efekty itemu.
+
+Te obiekty to:
 - [x] Player - gracz porusza się zgodnie z prawami fizyki i zasadami kolizji dla określonych obiektów
 - [x] Platform - platformy mogą kolidować z różnych stron i przy uderzeniach z różnych stron mogą wywoływać różne efekty
 - [ ] Item - statyczne obiekty, które wykonują jakieś działanie podczas kolizji i pozniej znikaja

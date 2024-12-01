@@ -1,3 +1,2 @@
-pub mod dynamic_player;
-pub mod static_object;
+pub mod player_physics;
 pub mod collision;
