@@ -42,7 +42,7 @@ impl Player {
         for platform in platforms {
             if self.is_on_top_of(platform, epsilon) {
                 if  platform.barriers.contains(&Top) {
-                    self.physics.y = platform.get_position().1 - self.physics.h; 
+                    self.physics.y = platform.y - self.physics.h; 
                     self.physics.vy = 0.0;
                     self.physics.on_ground = true;
                 }
@@ -51,23 +51,23 @@ impl Player {
             }
             if self.is_at_bottom_of(platform, epsilon) {
                 if platform.barriers.contains(&Direction::Bottom) {
-                    self.physics.y = platform.get_position().1 + platform.h + 0.1; 
+                    self.physics.y = platform.y + platform.h + 1.0; 
                     self.physics.vy = 0.0;
                 }
                 platform.do_action(&Bottom, self)?;
                 break;
             }
-            if self.is_touching_left_of(platform, epsilon) {
+            if self.is_touching_left_of(platform, epsilon) || self.is_colliding_from_left(platform) {
                 if platform.barriers.contains(&Direction::Left) {
-                    self.physics.x = platform.get_position().0 - self.physics.w; 
+                    self.physics.x = platform.x - self.physics.w; 
                     self.physics.vx = 0.0;
                 }
                 platform.do_action(&Left, self)?;
                 break;
             }
-            if self.is_touching_right_of(platform, epsilon) {
+            if self.is_touching_right_of(platform, epsilon) || self.is_colliding_from_right(platform) {
                 if platform.barriers.contains(&Direction::Right) {
-                    self.physics.x = platform.get_position().0 + platform.w; 
+                    self.physics.x = platform.x + platform.w; 
                     self.physics.vx = 0.0;
                 }
                 platform.do_action(&Right, self)?;
@@ -76,9 +76,14 @@ impl Player {
         }
 
         self.physics.x = self.physics.x.clamp(0.0, self.config.screen_width - self.physics.w);
+        if self.physics.x == self.config.screen_width - self.physics.w {
+            self.physics.vx = 0.0;
+        }
+
         self.physics.y = self.physics.y.clamp(0.0, self.config.screen_height - self.physics.h);
         if self.physics.y == self.config.screen_height - self.physics.h {
-            self.physics.on_ground = true
+            self.physics.on_ground = true;
+            self.physics.vy = 0.0;
         }
         Ok(())
     }

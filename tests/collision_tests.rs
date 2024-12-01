@@ -29,17 +29,21 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_is_touching_right_of() {
+    fn test_is_touching_x() {
         let obj1 = TestObject { x: 0.0, y: 0.0, w: 50.0, h: 50.0 };
         let obj2 = TestObject { x: 50.05, y: 0.0, w: 50.0, h: 50.0 };
         
-        assert!(obj1.is_touching_right_of(&obj2, 0.1));
-        assert!(!obj1.is_touching_right_of(&obj2, 0.01));
-        assert!(!obj2.is_touching_right_of(&obj1, 0.1));
+        assert!(obj1.is_touching_left_of(&obj2, 0.1));
+        assert!(!obj1.is_touching_left_of(&obj2, 0.01));
+        assert!(!obj2.is_touching_left_of(&obj1, 0.1));
+        
+        assert!(obj2.is_touching_right_of(&obj1, 0.1));
+        assert!(!obj2.is_touching_right_of(&obj1, 0.01));
+        assert!(!obj1.is_touching_right_of(&obj2, 0.1));
     }
 
     #[test]
-    fn test_is_at_bottom_of() {
+    fn test_is_at_y() {
         let obj1 = TestObject { x: 0.0, y: 50.05, w: 50.0, h: 50.0 };
         let obj2 = TestObject { x: 0.0, y: 0.0, w: 50.0, h: 50.0 };
 
@@ -74,7 +78,7 @@ mod tests {
         let obj2 = TestObject { x: 50.0, y: 0.0, w: 50.0, h: 50.0 };
         let obj3 = TestObject { x: 0.0, y: 50.0, w: 50.0, h: 50.0 };
 
-        assert!(obj1.is_touching_right_of(&obj2, 0.1));
+        assert!(obj1.is_touching_left_of(&obj2, 0.1));
         assert!(obj3.is_at_bottom_of(&obj1, 0.1));
         assert!(obj1.is_on_top_of(&obj3, 0.1));
     }
