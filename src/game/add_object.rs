@@ -1,5 +1,6 @@
 use ggez::GameError;
 
+use crate::creatures::creature::Creature;
 use crate::player::player::Player;
 use crate::objects::{platform::Platform, item::Item};
 use crate::utils::directions::Direction;
@@ -49,4 +50,8 @@ impl Game {
         );
         self.items.push(item);
     }    
+
+    pub fn add_creature(&mut self, creature: Creature) {
+        self.creatures.push(creature);
+    }
 }

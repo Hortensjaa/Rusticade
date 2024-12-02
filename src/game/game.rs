@@ -5,6 +5,7 @@ use ggez::input::keyboard::{KeyCode, KeyInput};
 use ggez::graphics::{Canvas, Color};
 use ggez::{Context, GameResult};
 
+use crate::creatures::creature::Creature;
 use crate::objects::{platform::Platform, item::Item};
 use crate::player::player::Player;
 use crate::config::Config;
@@ -13,6 +14,7 @@ pub struct Game {
     pub player: Player,
     pub platforms: Vec<Platform>,
     pub items: Vec<Item>,
+    pub creatures: Vec<Creature>,
     pub(super) config: Arc<Config>
 }
 
@@ -35,7 +37,18 @@ impl EventHandler for Game {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
         let e = self.player.update(&self.platforms, &mut self.items);
         match e {
-            Ok(()) => Ok(()),
+            Ok(()) => {
+                for c in self.creatures.iter_mut() {
+                    match c.update() {
+                        Ok(()) => continue, 
+                        Err(_) => {
+                            _ctx.request_quit(); 
+                            return Ok(()); 
+                        }
+                    }
+                }
+                Ok(())
+            },
             _ => {
                 _ctx.request_quit();
                 Ok(())
@@ -49,6 +62,7 @@ impl EventHandler for Game {
         self.draw_player(ctx, &mut canvas)?;
         self.draw_platforms(ctx, &mut canvas)?;
         self.draw_items(ctx, &mut canvas)?;
+        self.draw_creatures(ctx, &mut canvas)?;
 
         canvas.finish(ctx)
     }
@@ -81,6 +95,7 @@ impl Default for Game {
             player: Player::default(),
             platforms: Vec::new(),
             items: Vec::new(),
+            creatures: Vec::new(),
             config: Arc::new(Config::default())
         }
     }

@@ -47,4 +47,19 @@ impl Game {
         };
         Ok(())
     }
+
+    pub fn draw_creatures(&self, ctx: &mut Context, canvas: &mut graphics::Canvas) -> GameResult {
+        for creature in &self.creatures {
+            match creature.draw() {
+                Ok((img, draw_param)) => {
+                    canvas.draw(&img, draw_param);
+                }
+                _ => {
+                    let mesh = creature.draw_ellipse(ctx)?;
+                    canvas.draw(&mesh, graphics::DrawParam::default());
+                }
+            }
+        };
+        Ok(())
+    }
 }

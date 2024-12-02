@@ -12,7 +12,7 @@ Te obiekty to:
 - [x] Player - gracz porusza się zgodnie z prawami fizyki i zasadami kolizji dla określonych obiektów
 - [x] Platform - platformy mogą kolidować z różnych stron i przy uderzeniach z różnych stron mogą wywoływać różne efekty
 - [x] Item - statyczne obiekty, które wykonują jakieś działanie podczas kolizji i pozniej znikaja
-- [ ] Creature - poruszające się stworzenia, na które również działają prawa fizyki
+- [ ] Creature - stworzenia poruszające się po określonym torze, na które nie działają prawa fizyki (łącznie z kolizjami)
 Oraz domyślną implementację fizyki, która:
 - [x] Zapobiega kolizjom kolizyjnych obiektów
 - [x] Implementuje domyślnie ruchy w obydwie strony z określoną prędkością, skoki, grawitację
@@ -21,7 +21,6 @@ Oraz domyślną implementację fizyki, która:
 Gracz, który porusza się na planszy. Posiada: 
 - swoją fizykę, którą można zmieniać (prędkość, wysokość skoku, położenie i wielkość) - physics
 - swoją grafikę, zależną od ustawienia (stanie, skok, skręty) - graphics
-
 oraz domyślne parametry:
 1. hp - jeśli spadnie do 0, gra się kończy
 2. score - jeśli osiągnie domyślną wartość ustaloną przez użytkownika, gra się kończy (jeśli użytkownik nie zdefiniuje jej w configu, to nic się nie dzieje)
