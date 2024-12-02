@@ -1,3 +1,5 @@
+use core::f32;
+
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Config {
     // screen size
@@ -12,6 +14,7 @@ pub struct Config {
     pub gravity: f32,
     pub delta_time: f32,
     pub allow_flying: bool,
+    pub max_score: f32,
 
     // camera options (fixed means always focusing on player)
     pub fixed_x: bool,
@@ -28,6 +31,7 @@ impl Default for Config {
             gravity: 400.0,
             allow_flying: false,
             delta_time: 1.0 / 40.0,
+            max_score: f32::MAX,
             fixed_x: false,
             fixed_y: false,
         }

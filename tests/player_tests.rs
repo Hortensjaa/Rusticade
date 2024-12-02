@@ -65,9 +65,8 @@ mod tests {
         let mut player = Player::default();
         player.hp = 50.0;
 
-        let result = player.heal(20.0);
+        player.heal(20.0);
 
-        assert!(result.is_ok(), "Healing should succeed");
         assert_eq!(player.hp, 70.0, "Player HP should be 70.0 after healing");
     }
 
@@ -76,9 +75,8 @@ mod tests {
         let mut player = Player::default();
         player.hp = 100.0;
 
-        let result = player.take_damage(30.0);
+         player.take_damage(30.0);
 
-        assert!(result.is_ok(), "Taking damage should succeed");
         assert_eq!(player.hp, 70.0, "Player HP should be 70.0 after taking damage");
     }
 

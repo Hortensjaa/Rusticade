@@ -17,10 +17,19 @@ Oraz domyślną implementację fizyki, która:
 - [x] Zapobiega kolizjom kolizyjnych obiektów
 - [x] Implementuje domyślnie ruchy w obydwie strony z określoną prędkością, skoki, grawitację
 
+### Player
+Gracz, który porusza się na planszy. Posiada: 
+- swoją fizykę, którą można zmieniać (prędkość, wysokość skoku, położenie i wielkość) - physics
+- swoją grafikę, zależną od ustawienia (stanie, skok, skręty) - graphics
+
+oraz domyślne parametry:
+1. hp - jeśli spadnie do 0, gra się kończy
+2. score - jeśli osiągnie domyślną wartość ustaloną przez użytkownika, gra się kończy (jeśli użytkownik nie zdefiniuje jej w configu, to nic się nie dzieje)
+3. props - inne własności dodane przez użytkownika, np. stamina albo coins.
+
 ### Obiekty statyczne
 1. Platformy - domyślnie mają barierę tylko z góry (ale można dodać też po bokach i z dołu), mogą mieć akcję
 2. Itemy - nie mają barier, muszą mieć zdefiniowaną akcję w przypadku kolizji, znikają po użyciu.
- 
 
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki

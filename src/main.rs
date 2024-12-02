@@ -22,7 +22,10 @@ fn main() -> GameResult {
 
     let mut superplatform = Platform::new(250.0, 320.0, 80.0, 80.0);
     superplatform.set_barrier(Bottom, true);
-    superplatform.set_action(Bottom, |_p: &mut Player| { Ok(println!("aua moja głowa")) });
+    superplatform.set_action(Bottom, |_p: &mut Player| { 
+        _p.take_damage(10.0);
+        Ok(println!("aua moja głowa, hp: {}", _p.hp)) 
+    });
     fn action_top(p: &mut Player) -> Result<(), GameError> {
         p.physics.y -= 100.0;
         Ok(())

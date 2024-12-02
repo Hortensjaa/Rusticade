@@ -26,6 +26,10 @@ impl PlayerPhysics {
 
 impl Player {
     pub fn update(&mut self, platforms: &[Platform], items: &mut Vec<Item>) -> Result<(), GameError> {
+        if self.hp <= 0.0 || self.score > self.config.max_score {
+            return Err(GameError::CustomError(String::from("Finish condition")));
+        }
+
         if !self.physics.on_ground {
             self.physics.vy += self.config.gravity * self.config.delta_time;
         }

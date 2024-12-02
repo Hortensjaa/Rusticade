@@ -23,14 +23,20 @@ impl Player {
         Player { physics: PlayerPhysics::new(x, y, w, h, speed, jump), config, hp, score: 0.0, ..Default::default()}
     }
 
-    pub fn heal(&mut self, points: f32) -> Result<(), GameError> {
+    pub fn heal(&mut self, points: f32) {
         self.hp += points;
-        Ok(())
     }
 
-    pub fn take_damage(&mut self, points: f32) -> Result<(), GameError> {
+    pub fn take_damage(&mut self, points: f32){
         self.hp -= points;
-        Ok(())
+    }
+
+    pub fn add_score(&mut self, points: f32) {
+        self.score += points;
+    }
+
+    pub fn reduce_score(&mut self, points: f32){
+        self.score -= points;
     }
 
     pub fn update_property(&mut self, key: &str, val: f32) -> Result<(), GameError> {
