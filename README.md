@@ -11,18 +11,16 @@ oraz obiektów na ekranie; każdy obiekt ma swoją:
 Te obiekty to:
 - [x] Player - gracz porusza się zgodnie z prawami fizyki i zasadami kolizji dla określonych obiektów
 - [x] Platform - platformy mogą kolidować z różnych stron i przy uderzeniach z różnych stron mogą wywoływać różne efekty
-- [ ] Item - statyczne obiekty, które wykonują jakieś działanie podczas kolizji i pozniej znikaja
+- [x] Item - statyczne obiekty, które wykonują jakieś działanie podczas kolizji i pozniej znikaja
 - [ ] Creature - poruszające się stworzenia, na które również działają prawa fizyki
 Oraz domyślną implementację fizyki, która:
 - [x] Zapobiega kolizjom kolizyjnych obiektów
 - [x] Implementuje domyślnie ruchy w obydwie strony z określoną prędkością, skoki, grawitację
 
-### Logika kolizji obiektów fizycznych
-Dwa obiekty statyczne nic nie robią w przypadku kolizji.
-Dwa obiekty dynamiczne ??.
-Obiekt dynamiczny odbija sie od statycznego, jesli statyczny ma zdefiniowanią barierę kolizji z tej strony wpw. przenika.
-Domyślnie, bariera kolizji platform jest tylko z góry.
-Itemy nie mają w ogóle kolizji i znikają po użyciu, tym się różnią od platform.
+### Obiekty statyczne
+1. Platformy - domyślnie mają barierę tylko z góry (ale można dodać też po bokach i z dołu), mogą mieć akcję
+2. Itemy - nie mają barier, muszą mieć zdefiniowaną akcję w przypadku kolizji, znikają po użyciu.
+ 
 
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki
@@ -30,8 +28,9 @@ Itemy nie mają w ogóle kolizji i znikają po użyciu, tym się różnią od pl
 - [x] fizyka ruchu gracza (uuggghhh)
 - [x] przeniesienie consts jako dostępne dla użytkownika
 - [x] grafiki
-- [ ] itemy
+- [x] itemy
 - [x] dodawanie graczowi własnych pól (np. pieniędzy)
+- [ ] poprawić fizykę góra-dół
 - [ ] dodawanie dodatkowej logiki do pętli zdarzeń (np. score == 100 jako koniec gry)
 - [ ] mniej boilerplatu przy tworzeniu gry (przekazywanie configu i kontekstu? żal)
 

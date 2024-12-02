@@ -5,20 +5,20 @@ use ggez::input::keyboard::{KeyCode, KeyInput};
 use ggez::graphics::{Canvas, Color};
 use ggez::{Context, GameResult};
 
-use crate::objects::platform::Platform;
+use crate::objects::{platform::Platform, item::Item};
 use crate::player::player::Player;
 use crate::config::Config;
 
 pub struct Game {
     pub player: Player,
     pub platforms: Vec<Platform>,
+    pub items: Vec<Item>,
     pub(super) config: Arc<Config>
 }
 
 impl Game {
     pub fn new(player: Player, config: Arc<Config>) -> GameResult<Self> {
-        let platforms = Vec::new();
-        Ok(Self { player, platforms, config })
+        Ok(Game { player, config, ..Game::default() })
     }
 
     fn handle_player_input(&mut self, input: KeyCode) -> GameResult {
@@ -33,7 +33,7 @@ impl Game {
 
 impl EventHandler for Game {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        let e = self.player.update(&self.platforms);
+        let e = self.player.update(&self.platforms, &mut self.items);
         match e {
             Ok(()) => Ok(()),
             _ => {
@@ -48,6 +48,7 @@ impl EventHandler for Game {
 
         self.draw_player(ctx, &mut canvas)?;
         self.draw_platforms(ctx, &mut canvas)?;
+        self.draw_items(ctx, &mut canvas)?;
 
         canvas.finish(ctx)
     }
@@ -79,6 +80,7 @@ impl Default for Game {
         Game {
             player: Player::default(),
             platforms: Vec::new(),
+            items: Vec::new(),
             config: Arc::new(Config::default())
         }
     }

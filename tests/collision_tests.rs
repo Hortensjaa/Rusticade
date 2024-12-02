@@ -1,4 +1,4 @@
-use rusticade::physics::collision::*;
+use rusticade::utils::collidable::*;
 
 #[derive(Debug)]
 struct TestObject {

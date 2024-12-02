@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
-use ggez::GameError;
+use ggez::{graphics::{Color, Image}, GameError};
 
-use crate::{player::player::Player, physics::{collision::Collidable, directions::Direction::{self, *}}};
+use crate::{player::player::Player, utils::{collidable::Collidable, directions::Direction::{self, *}, drawable::DrawableClass}};
 use super::static_graphics::StaticGraphics;
 
 
@@ -42,6 +42,24 @@ impl Platform {
             None => Ok(())
         }
         
+    }
+}
+
+impl DrawableClass for Platform {
+    fn get_image(&self) -> Option<Image> {
+        self.graphics.basic.clone()
+    }
+
+    fn get_color(&self) -> Color {
+        self.graphics.color
+    } 
+
+    fn get_position(&self) -> (f32, f32) {
+        (self.x, self.y)
+    }
+
+    fn get_size(&self) -> (f32, f32) {
+        (self.w, self.h)
     }
 }
 

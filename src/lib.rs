@@ -1,4 +1,4 @@
-pub mod physics;
+pub mod utils;
 pub mod game;
 pub mod config;
 pub mod objects;

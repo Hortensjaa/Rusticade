@@ -1,7 +1,7 @@
 use ggez::GameError;
 
-use crate::objects::platform::Platform;
-use crate::physics::{collision::Collidable, directions::Direction::{self, *}};
+use crate::objects::{platform::Platform, item::Item};
+use crate::utils::{collidable::Collidable, directions::Direction::{self, *}};
 
 use super::player::Player;
 
@@ -25,7 +25,7 @@ impl PlayerPhysics {
 }
 
 impl Player {
-    pub fn update(&mut self, platforms: &[Platform]) -> Result<(), GameError> {
+    pub fn update(&mut self, platforms: &[Platform], items: &mut Vec<Item>) -> Result<(), GameError> {
         if !self.physics.on_ground {
             self.physics.vy += self.config.gravity * self.config.delta_time;
         }
@@ -71,6 +71,14 @@ impl Player {
             }
         }
 
+        for i in (0..items.len()).rev() {
+            let item = &mut items[i];
+            if self.is_colliding_with(item) {
+                item.do_action(self)?;
+                items.remove(i);
+            }
+        }
+
         self.physics.x = self.physics.x.clamp(0.0, self.config.screen_width - self.physics.w);
         if self.physics.x == self.config.screen_width - self.physics.w {
             self.physics.vx = 0.0;
@@ -79,6 +87,9 @@ impl Player {
         self.physics.y = self.physics.y.clamp(0.0, self.config.screen_height - self.physics.h);
         if self.physics.y == self.config.screen_height - self.physics.h {
             self.physics.on_ground = true;
+            self.physics.vy = 0.0;
+        }
+        if self.physics.y == 0.0 {
             self.physics.vy = 0.0;
         }
         Ok(())

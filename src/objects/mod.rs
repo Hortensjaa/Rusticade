@@ -1,3 +1,3 @@
 pub mod platform;
 pub mod item;
-pub mod static_graphics;
+mod static_graphics;

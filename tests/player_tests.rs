@@ -25,8 +25,7 @@ mod tests {
         let config = mock_config();
         let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 100.0, config);
         let platform = Platform::new(0.0, 0.0, 100.0, 10.0); // mock platform
-
-        let result = player.update(&[platform]);
+        let result = player.update(&[platform], &mut vec![]);
 
         assert!(result.is_ok(), "Update should succeed");
     }
@@ -36,7 +35,7 @@ mod tests {
         let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 100.0, Arc::new(Config::default()));
 
         player.move_right().unwrap();
-        let _ = player.update(&[]);  
+        let _ = player.update(&[], &mut vec![]);  
 
         assert_eq!(player.physics.x, 10.0 + 100.0 * player.config.delta_time); 
     }
@@ -46,7 +45,7 @@ mod tests {
         let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 100.0, Arc::new(Config::default()));
 
         player.move_left().unwrap();
-        let _ = player.update(&[]);  
+        let _ = player.update(&[], &mut vec![]);  
 
         assert_eq!(player.physics.x, 10.0 - 100.0 * player.config.delta_time);  
     }

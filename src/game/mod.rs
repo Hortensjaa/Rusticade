@@ -1,4 +1,4 @@
-pub mod add_platforms;
+pub mod add_object;
 pub mod game;
 pub mod context;
-pub mod game_graphics;
+mod game_graphics;

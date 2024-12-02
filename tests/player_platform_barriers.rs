@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use rusticade::objects::platform::Platform;
-    use rusticade::physics::directions::Direction::*;
+    use rusticade::utils::directions::Direction::*;
     use rusticade::player::player::Player;
 
     #[test]
@@ -21,8 +21,9 @@ mod tests {
         platform.y = 200.0;
         player.physics.x = 0.0;
         player.physics.y = 100.0;
+        let mut items = vec![];
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
         }
         
         assert_eq!(player.physics.y, platform.y - platform.h);
@@ -39,8 +40,9 @@ mod tests {
         player.physics.x = 0.0;
         player.physics.y = 100.0;
         platform.barriers.remove(&Top);
+        let mut items = vec![];
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
         }
         
         assert_eq!(player.physics.y + player.physics.h, player.config.screen_height);
@@ -59,9 +61,10 @@ mod tests {
         player.physics.vx = 5.0; 
 
         platform.barriers.insert(Left); 
+        let mut items = vec![];
 
         while player.physics.vx > 0.0 {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
         }
 
         assert_eq!(player.physics.x + player.physics.w, platform.x);
@@ -79,10 +82,11 @@ mod tests {
         player.physics.y = player.config.screen_height;
         player.physics.vx = -5.0; 
 
-        platform.barriers.insert(Right); 
+        platform.barriers.insert(Right);
+        let mut items = vec![]; 
 
         while player.physics.vx < 0.0 {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
         }
 
         assert_eq!(player.physics.x, platform.x + platform.w);
@@ -98,9 +102,10 @@ mod tests {
         player.physics.x = 0.0; 
         player.physics.y = player.config.screen_height;
         player.physics.vx = 5.0; 
+        let mut items = vec![];
 
         while player.physics.x + player.physics.w < player.config.screen_width {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
         }
 
         assert!(player.physics.x + player.physics.w >= player.config.screen_width);
@@ -116,10 +121,10 @@ mod tests {
         player.physics.x = 200.0; 
         player.physics.y = player.config.screen_height;
         player.physics.vx = -5.0; 
-
+        let mut items = vec![];
         
         while player.physics.x > 0.0 {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
         }
 
         assert!(player.physics.x <= 0.0);
@@ -130,15 +135,16 @@ mod tests {
         let mut player = Player::default();
         let mut platform = Platform::default();
         platform.x = 0.0;
-        platform.y = player.config.screen_height - 100.0;
+        platform.y = player.config.screen_height - 150.0;
         player.physics.x = 0.0; 
         player.physics.y = player.config.screen_height;
         player.physics.vy = -100.0;
         platform.barriers.insert(Bottom);
+            let mut items = vec![];
         
         while !player.physics.on_ground {
             assert!(player.physics.y - player.physics.h >= player.config.screen_height - 110.0);
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
             player.physics.vy = -100.0;
         }
     }
@@ -148,15 +154,15 @@ mod tests {
         let mut player = Player::default();
         let mut platform = Platform::default();
         platform.x = 0.0;
-        platform.y = player.config.screen_height - 100.0;
+        platform.y = player.config.screen_height - 150.0;
         player.physics.x = 0.0; 
         player.physics.y = player.config.screen_height;
         player.physics.vy = -100.0;
+        let mut items = vec![];
         
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
             player.physics.vy = -100.0;
-
             if player.physics.y - player.physics.h > player.config.screen_height - 100.0 {
                 break;
             }

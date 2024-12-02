@@ -21,7 +21,8 @@ mod test {
         let _ = player.move_right();
         assert_eq!(player.physics.vx, player.physics.speed);
 
-        let _ = player.update(&[]);
+        let mut items = vec![];
+        let _ = player.update(&[], &mut items);
         assert_eq!(player.physics.x, 100.0 + player.physics.speed * player.config.delta_time);
     }
 
@@ -33,7 +34,8 @@ mod test {
         let _ = player.move_left();
         assert_eq!(player.physics.vx, -player.physics.speed);
 
-        let _ = player.update(&[]);
+        let mut items = vec![];
+        let _ = player.update(&[], &mut items);
         assert_eq!(player.physics.x, 100.0 - player.physics.speed * player.config.delta_time);
     }
 
@@ -43,10 +45,12 @@ mod test {
         player.physics.x = 100.0;
         player.physics.speed = 100.0;
         let _ = player.move_right();
-        let _ = player.update(&[]);
+        let mut items = vec![];
+        let _ = player.update(&[], &mut items);
 
         let _ = player.stop();
-        let _ = player.update(&[]);
+        let mut items = vec![];
+        let _ = player.update(&[], &mut items);
 
         assert_eq!(player.physics.vx, 0.0);
         assert_eq!(player.physics.x, 100.0 + player.physics.speed * player.config.delta_time); // No change after stop
@@ -72,8 +76,9 @@ mod test {
         platform.y = 200.0;
         player.physics.x = 0.0;
         player.physics.y = 100.0; // Start above the platform
+        let mut items = vec![];
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()]);
+            let _ = player.update(&[platform.clone()], &mut items);
         }
         
         assert_eq!(player.physics.y, platform.y - platform.h); // Player should land on top of platform
@@ -85,7 +90,8 @@ mod test {
     fn test_gravity_effect() {
         let mut player = create_default_player();
         player.physics.vy = 0.0; // Initial vertical speed
-        let _ = player.update(&[]);
+        let mut items = vec![];
+        let _ = player.update(&[], &mut items);
 
         // After update, vy should increase due to gravity (assuming gravity is negative)
         assert!(player.physics.vy > 0.0);
@@ -98,7 +104,8 @@ mod test {
         player.physics.x = 1000.0; // Move player outside the screen to the right
         player.physics.y = 1000.0; // Move player outside the screen to the bottom
 
-        let _ = player.update(&[]);
+        let mut items = vec![];
+        let _ = player.update(&[], &mut items);
 
         assert_eq!(player.physics.x, player.config.screen_width - player.physics.w); // Player should be clamped to the right edge
         assert_eq!(player.physics.y, player.config.screen_height - player.physics.h); // Player should be clamped to the bottom edge

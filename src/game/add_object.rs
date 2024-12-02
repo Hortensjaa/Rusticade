@@ -1,8 +1,8 @@
 use ggez::GameError;
 
 use crate::player::player::Player;
-use crate::objects::platform::Platform;
-use crate::physics::directions::Direction;
+use crate::objects::{platform::Platform, item::Item};
+use crate::utils::directions::Direction;
 
 use super::game::Game;
 
@@ -31,4 +31,22 @@ impl Game {
         });
         self.platforms.push(platform);
     }
+
+    pub fn add_item(&mut self, item: Item) {
+        self.items.push(item);
+    }
+
+    pub fn add_item_custom_size(&mut self, x: f32, y: f32, w: f32, h: f32, action: fn(&mut Player) -> Result<(), GameError>) {
+        let item = Item::new(
+            x, y, w, h, action
+        );
+        self.items.push(item);
+    }
+
+    pub fn add_item_default_size(&mut self, x: f32, y: f32, action: fn(&mut Player) -> Result<(), GameError>) {
+        let item = Item::new(
+            x, y, self.config.grid_cell_width, self.config.grid_cell_height, action
+        );
+        self.items.push(item);
+    }    
 }
