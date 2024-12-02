@@ -5,7 +5,7 @@ Reprezentuje dużo bardziej wysokopoziomowe podejście do projektowania gier pla
 - [x] Game 
 oraz obiektów na ekranie; każdy obiekt ma swoją: 
 - [x] fizykę (physics) 
-- [ ] grafikę (graphics)
+- [x] grafikę (graphics)
 - [x] dodatkowe opcje zależne od typu np. hp gracza, efekty itemu.
 
 Te obiekty to:
@@ -22,16 +22,17 @@ Dwa obiekty statyczne nic nie robią w przypadku kolizji.
 Dwa obiekty dynamiczne ??.
 Obiekt dynamiczny odbija sie od statycznego, jesli statyczny ma zdefiniowanią barierę kolizji z tej strony wpw. przenika.
 Domyślnie, bariera kolizji platform jest tylko z góry.
-Itemy nie mają w ogóle kolizji, tym się różnią.
+Itemy nie mają w ogóle kolizji i znikają po użyciu, tym się różnią od platform.
 
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki
 - [x] kolizja gracza i platformy
 - [x] fizyka ruchu gracza (uuggghhh)
 - [x] przeniesienie consts jako dostępne dla użytkownika
-- [ ] grafiki
+- [x] grafiki
 - [ ] itemy
-- [ ] dodawanie graczowi własnych pól (np. pieniędzy)
+- [x] dodawanie graczowi własnych pól (np. pieniędzy)
+- [ ] dodawanie dodatkowej logiki do pętli zdarzeń
 
 ## Rozwinięcie
 - [ ] efekty specjalne (spowolnienie przez określony czas, zatrucie itd.)

@@ -14,26 +14,25 @@ pub struct PlayerPhysics {
     pub vy: f32,
     pub on_ground: bool,
     pub speed: f32,
-    pub jump: f32,
-    pub delta_time: f32
+    pub jump: f32
 }
 
 impl PlayerPhysics {
-        pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32) -> Self {
-        PlayerPhysics{x, y, w, h, speed, jump, delta_time, ..PlayerPhysics::default()}
+        pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32) -> Self {
+        PlayerPhysics{x, y, w, h, speed, jump, ..PlayerPhysics::default()}
     }
 }
 
 impl Player {
     pub fn update(&mut self, platforms: &[Platform]) -> Result<(), GameError> {
         if !self.physics.on_ground {
-            self.physics.vy += self.config.gravity * self.physics.delta_time;
+            self.physics.vy += self.config.gravity * self.config.delta_time;
         }
 
-        self.physics.x += self.physics.vx * self.physics.delta_time;
-        self.physics.y += self.physics.vy * self.physics.delta_time;
+        self.physics.x += self.physics.vx * self.config.delta_time;
+        self.physics.y += self.physics.vy * self.config.delta_time;
 
-        let epsilon = self.physics.vy.abs() * self.physics.delta_time + 0.1;
+        let epsilon = self.physics.vy.abs() * self.config.delta_time + 0.1;
         self.physics.on_ground = false;
         for platform in platforms {
             if self.is_on_top_of(platform, epsilon) {
@@ -85,7 +84,7 @@ impl Player {
     }
 
     pub fn jump(&mut self) -> Result<(), GameError> {
-        let epsilon = self.physics.vy.abs() * self.physics.delta_time + 1.0;
+        let epsilon = self.physics.vy.abs() * self.config.delta_time + 1.0;
         if self.physics.on_ground {
             self.physics.vy = -self.physics.jump; 
             self.physics.y -= epsilon;
@@ -122,7 +121,6 @@ impl Default for PlayerPhysics {
             on_ground: false,
             speed: 100.0,
             jump: 400.0,
-            delta_time: 1.0 / 40.0
         }
     }
 }

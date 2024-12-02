@@ -10,6 +10,7 @@ pub struct Config {
 
     // przysics options
     pub gravity: f32,
+    pub delta_time: f32,
     pub allow_flying: bool,
 
     // camera options (fixed means always focusing on player)
@@ -26,6 +27,7 @@ impl Default for Config {
             grid_cell_height: 50.0,
             gravity: 400.0,
             allow_flying: false,
+            delta_time: 1.0 / 40.0,
             fixed_x: false,
             fixed_y: false,
         }

@@ -20,8 +20,8 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, delta_time: f32, hp: f32, config: Arc<Config>) -> Self {
-        Player { physics: PlayerPhysics::new(x, y, w, h, speed, jump, delta_time), config, hp, score: 0.0, ..Default::default()}
+    pub fn new(x: f32, y: f32, w: f32, h: f32, speed: f32, jump: f32, hp: f32, config: Arc<Config>) -> Self {
+        Player { physics: PlayerPhysics::new(x, y, w, h, speed, jump), config, hp, score: 0.0, ..Default::default()}
     }
 
     pub fn heal(&mut self, points: f32) -> Result<(), GameError> {
@@ -87,8 +87,8 @@ macro_rules! create_player {
         crate::classes::player::Player::new($x, $y, $w, $h, 100.0, 400.0, 1.0 / 40.0, $hp, $config)
     };
     
-    ($x:expr, $y:expr, $w:expr, $h:expr, $speed:expr, $jump:expr, $delta_time:expr, $hp:expr, $config:expr) => {
-        crate::classes::player::Player::new($x, $y, $w, $h, $speed, $jump, $delta_time, $hp, $config)
+    ($x:expr, $y:expr, $w:expr, $h:expr, $speed:expr, $jump:expr, $hp:expr, $config:expr) => {
+        crate::classes::player::Player::new($x, $y, $w, $h, $speed, $jump, $hp, $config)
     };
 }
 

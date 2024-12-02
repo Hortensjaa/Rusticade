@@ -21,7 +21,7 @@ mod test {
         assert_eq!(player.physics.vx, player.physics.speed);
 
         let _ = player.update(&[]);
-        assert_eq!(player.physics.x, 100.0 + player.physics.speed * player.physics.delta_time);
+        assert_eq!(player.physics.x, 100.0 + player.physics.speed * player.config.delta_time);
     }
 
     #[test]
@@ -33,7 +33,7 @@ mod test {
         assert_eq!(player.physics.vx, -player.physics.speed);
 
         let _ = player.update(&[]);
-        assert_eq!(player.physics.x, 100.0 - player.physics.speed * player.physics.delta_time);
+        assert_eq!(player.physics.x, 100.0 - player.physics.speed * player.config.delta_time);
     }
 
     #[test]
@@ -48,7 +48,7 @@ mod test {
         let _ = player.update(&[]);
 
         assert_eq!(player.physics.vx, 0.0);
-        assert_eq!(player.physics.x, 100.0 + player.physics.speed * player.physics.delta_time); // No change after stop
+        assert_eq!(player.physics.x, 100.0 + player.physics.speed * player.config.delta_time); // No change after stop
     }
 
     // Test jumping
@@ -116,6 +116,5 @@ mod test {
         assert_eq!(player.physics.vy, 0.0);
         assert_eq!(player.physics.speed, 100.0);
         assert_eq!(player.physics.jump, 400.0);
-        assert_eq!(player.physics.delta_time, 1.0 / 40.0);
     }
 }

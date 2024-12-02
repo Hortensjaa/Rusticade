@@ -11,7 +11,7 @@ mod tests {
     #[test]
     fn test_player_creation() {
         let config = mock_config();
-        let player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 1.0, 100.0, config);
+        let player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 100.0, config);
 
         assert_eq!(player.hp, 100.0, "Player HP should be 100.0");
         assert_eq!(player.score, 0.0, "Player score should be 0.0");
@@ -22,7 +22,7 @@ mod tests {
     #[test]
     fn test_update_player_position() {
         let config = mock_config();
-        let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 1.0, 100.0, config);
+        let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 100.0, config);
         let platform = Platform::new(0.0, 0.0, 100.0, 10.0); // mock platform
 
         let result = player.update(&[platform]);
@@ -32,28 +32,28 @@ mod tests {
 
     #[test]
     fn test_player_move_right() {
-        let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 1.0 / 60.0, 100.0, Arc::new(Config::default()));
+        let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 100.0, Arc::new(Config::default()));
 
         player.move_right().unwrap();
         let _ = player.update(&[]);  
 
-        assert_eq!(player.physics.x, 10.0 + 100.0 * 1.0 / 60.0); 
+        assert_eq!(player.physics.x, 10.0 + 100.0 * player.config.delta_time); 
     }
 
     #[test]
     fn test_player_move_left() {
-        let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 1.0 / 60.0, 100.0, Arc::new(Config::default()));
+        let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 100.0, Arc::new(Config::default()));
 
         player.move_left().unwrap();
         let _ = player.update(&[]);  
 
-        assert_eq!(player.physics.x, 10.0 - 100.0 * 1.0 / 60.0);  
+        assert_eq!(player.physics.x, 10.0 - 100.0 * player.config.delta_time);  
     }
 
     #[test]
     fn test_jump() {
         let config = mock_config();
-        let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 1.0, 100.0, config);
+        let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 100.0, config);
 
         let result = player.jump();
 
@@ -62,8 +62,8 @@ mod tests {
 
     #[test]
     fn test_heal() {
-        let config = mock_config();
-        let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 1.0, 50.0, config);
+        let mut player = Player::default();
+        player.hp = 50.0;
 
         let result = player.heal(20.0);
 
@@ -73,8 +73,8 @@ mod tests {
 
     #[test]
     fn test_take_damage() {
-        let config = mock_config();
-        let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 1.0, 100.0, config);
+        let mut player = Player::default();
+        player.hp = 100.0;
 
         let result = player.take_damage(30.0);
 
