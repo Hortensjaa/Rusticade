@@ -1,6 +1,6 @@
 use ggez::graphics::{Color, Image};
 
-use crate::classes::player::Player;
+use super::player::Player;
 
 #[derive(Debug, Clone)]
 pub struct PlayerGraphics {

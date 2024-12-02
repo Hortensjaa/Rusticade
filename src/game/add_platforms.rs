@@ -1,6 +1,8 @@
 use ggez::GameError;
 
-use crate::classes::{directions::Direction, platform::Platform, player::Player};
+use crate::player::player::Player;
+use crate::objects::platform::Platform;
+use crate::physics::directions::Direction;
 
 use super::game::Game;
 

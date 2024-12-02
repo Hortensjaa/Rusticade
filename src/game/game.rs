@@ -5,8 +5,8 @@ use ggez::input::keyboard::{KeyCode, KeyInput};
 use ggez::graphics::{Canvas, Color};
 use ggez::{Context, GameResult};
 
-use crate::classes::platform::Platform;
-use crate::classes::player::Player;
+use crate::objects::platform::Platform;
+use crate::player::player::Player;
 use crate::config::Config;
 
 pub struct Game {

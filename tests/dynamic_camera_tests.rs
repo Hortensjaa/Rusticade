@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod test {
-    use rusticade::classes::{platform::Platform, player::Player};
+    use rusticade::objects::platform::Platform;
+    use rusticade::player::player::Player;
 
     // Helper function to create a default player for testing
     fn create_default_player() -> Player {

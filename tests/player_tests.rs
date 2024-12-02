@@ -2,7 +2,8 @@
 mod tests {
     use std::sync::Arc;
     use rusticade::config::Config;
-    use rusticade::classes::{player::Player, platform::Platform};
+    use rusticade::objects::platform::Platform;
+    use rusticade::player::player::Player;
 
     fn mock_config() -> Arc<Config> {
         Arc::new(Config::default())

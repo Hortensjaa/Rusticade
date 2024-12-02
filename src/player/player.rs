@@ -5,8 +5,7 @@ use ggez::GameError;
 
 use crate::config::Config;
 
-use crate::physics::player_physics::PlayerPhysics;
-use crate::graphics::player_graphics::PlayerGraphics;
+use super::{player_graphics::PlayerGraphics, player_physics::PlayerPhysics};
 
 
 #[derive(Debug, Clone)]

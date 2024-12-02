@@ -32,7 +32,8 @@ Itemy nie mają w ogóle kolizji i znikają po użyciu, tym się różnią od pl
 - [x] grafiki
 - [ ] itemy
 - [x] dodawanie graczowi własnych pól (np. pieniędzy)
-- [ ] dodawanie dodatkowej logiki do pętli zdarzeń
+- [ ] dodawanie dodatkowej logiki do pętli zdarzeń (np. score == 100 jako koniec gry)
+- [ ] mniej boilerplatu przy tworzeniu gry (przekazywanie configu i kontekstu? żal)
 
 ## Rozwinięcie
 - [ ] efekty specjalne (spowolnienie przez określony czas, zatrucie itd.)
@@ -41,4 +42,3 @@ Itemy nie mają w ogóle kolizji i znikają po użyciu, tym się różnią od pl
 ## Dodatki
 - nieskonczone generowanie platform (możliwość dla gracza)
 - rodzaje kamery gracza (dynamic, fixedX, fixedY)
-- generowanie platform

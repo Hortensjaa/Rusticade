@@ -1,8 +1,9 @@
 use ggez::GameError;
 
-use crate::classes::{directions::Direction::{self, *}, platform::Platform, player::Player};
+use crate::objects::platform::Platform;
+use crate::physics::{collision::Collidable, directions::Direction::{self, *}};
 
-use super::collision::Collidable;
+use super::player::Player;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct PlayerPhysics {

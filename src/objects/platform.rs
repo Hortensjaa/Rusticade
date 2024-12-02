@@ -1,10 +1,9 @@
 use std::collections::{HashMap, HashSet};
-
 use ggez::GameError;
 
-use crate::{classes::player::Player, graphics::static_graphics::StaticGraphics, physics::collision::Collidable};
+use crate::{player::player::Player, physics::{collision::Collidable, directions::Direction::{self, *}}};
+use super::static_graphics::StaticGraphics;
 
-use super::directions::Direction::{self, *};
 
 #[derive(Clone, Debug)]
 pub struct Platform {

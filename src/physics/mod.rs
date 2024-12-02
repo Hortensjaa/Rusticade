@@ -1,2 +1,2 @@
-pub mod player_physics;
+pub mod directions;
 pub mod collision;

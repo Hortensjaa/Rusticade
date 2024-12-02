@@ -1,6 +1,8 @@
 #[cfg(test)]
 mod tests {
-    use rusticade::classes::{player::*, platform::*, directions::Direction::*};
+    use rusticade::objects::platform::Platform;
+    use rusticade::physics::directions::Direction::*;
+    use rusticade::player::player::Player;
 
     #[test]
     fn test_set_barrier() {

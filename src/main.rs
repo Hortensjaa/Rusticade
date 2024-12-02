@@ -1,14 +1,14 @@
-mod classes;
 mod game;
 mod physics;
 mod config;
-mod graphics;
+mod objects;
+mod player;
 
 use std::sync::Arc;
 
-use classes::platform::Platform;
-use classes::directions::Direction::*;
-use classes::player:: Player;
+use objects::platform::Platform;
+use physics::directions::Direction::*;
+use player::player::Player;
 use config::Config;
 use ggez::{event, GameResult, GameError};
 use game::context::create_game_context;

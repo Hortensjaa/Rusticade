@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use rusticade::classes::platform::Platform;
+    use rusticade::objects::platform::Platform;
 
 
     #[test]
