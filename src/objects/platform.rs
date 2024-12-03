@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use ggez::{graphics::{Color, Image}, GameError};
 
-use crate::{player::player::Player, shared::{collidable::Collidable, directions::Direction::{self, *}, drawable::DrawableClass}};
+use crate::{player::player::Player, shared::{collidable::Collidable, customisable::Customisable, directions::Direction::{self, *}, drawable::DrawableClass}};
 use super::object_graphics::StaticGraphics;
 
 
@@ -14,7 +14,8 @@ pub struct Platform {
     pub barriers: HashSet<Direction>,
     pub finish_line: bool,
     pub actions: HashMap<Direction, fn(&mut Player) -> Result<(), GameError>>,
-    pub graphics: StaticGraphics
+    pub graphics: StaticGraphics,
+    props: HashMap<String, f32> 
 }
 
 
@@ -74,7 +75,8 @@ impl Default for Platform {
             finish_line: false,
             barriers: HashSet::from([Top]),
             graphics: StaticGraphics::default(),
-            actions: HashMap::new()
+            actions: HashMap::new(),
+            props: HashMap::new()
         }
     }
 }
@@ -86,5 +88,20 @@ impl Collidable for Platform {
 
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
+    }
+}
+
+impl Customisable for Platform {
+
+    fn update_property(&mut self, key: &str, val: f32) -> Result<(), GameError> {
+        self.props.insert(key.to_string(), val);
+        Ok(())
+    }
+
+    fn get_property(&self, key: &str) -> Result<f32, GameError> {
+        self.props
+            .get(key)
+            .copied() 
+            .ok_or_else(|| GameError::CustomError(format!("Property '{}' not found", key)))
     }
 }

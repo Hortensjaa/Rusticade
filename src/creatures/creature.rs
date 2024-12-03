@@ -4,6 +4,7 @@ use std::sync::Arc;
 use ggez::GameError;
 
 use crate::shared::collidable::Collidable;
+use crate::shared::customisable::Customisable;
 use crate::{shared::config::Config, player::player::Player};
 
 use super::creature_graphics::CreatureGraphics;
@@ -76,5 +77,20 @@ impl Collidable for Creature {
 
     fn get_size(&self) -> (f32, f32) {
         (self.physics.w, self.physics.h)
+    }
+}
+
+impl Customisable for Creature {
+
+    fn update_property(&mut self, key: &str, val: f32) -> Result<(), GameError> {
+        self.props.insert(key.to_string(), val);
+        Ok(())
+    }
+
+    fn get_property(&self, key: &str) -> Result<f32, GameError> {
+        self.props
+            .get(key)
+            .copied() 
+            .ok_or_else(|| GameError::CustomError(format!("Property '{}' not found", key)))
     }
 }

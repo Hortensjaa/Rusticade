@@ -1,8 +1,11 @@
+use std::collections::HashMap;
+
 use ggez::graphics::{Color, Image};
 use ggez::GameError;
 
 use crate::shared::collidable::Collidable;
 use crate::player::player::Player;
+use crate::shared::customisable::Customisable;
 use crate::shared::drawable::DrawableClass;
 use super::object_graphics::StaticGraphics;
 
@@ -14,7 +17,8 @@ pub struct Item {
     pub w: f32,
     pub h: f32,
     pub action: fn(&mut Player) -> Result<(), GameError>,
-    pub graphics: StaticGraphics
+    pub graphics: StaticGraphics,
+    props: HashMap<String, f32> 
 }
 
 impl Item {
@@ -40,7 +44,8 @@ impl Default for Item {
             w: 50.0,
             h: 50.0,
             graphics: StaticGraphics::default(),
-            action: |_p: &mut Player| Ok(())
+            action: |_p: &mut Player| Ok(()),
+            props: HashMap::new()
         }
     }
 }
@@ -70,5 +75,21 @@ impl DrawableClass for Item {
 
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
+    }
+}
+
+
+impl Customisable for Item {
+
+    fn update_property(&mut self, key: &str, val: f32) -> Result<(), GameError> {
+        self.props.insert(key.to_string(), val);
+        Ok(())
+    }
+
+    fn get_property(&self, key: &str) -> Result<f32, GameError> {
+        self.props
+            .get(key)
+            .copied() 
+            .ok_or_else(|| GameError::CustomError(format!("Property '{}' not found", key)))
     }
 }

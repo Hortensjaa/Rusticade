@@ -9,17 +9,16 @@ mod tests {
         player.physics.x = 10.0;
         player.physics.y = 10.0;
 
-        let item = Item {
-            x: 10.0,
-            y: 10.0,
-            w: 10.0,
-            h: 10.0,
-            action: |player: &mut Player| {
+        let item = Item::new(
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            |player: &mut Player| {
                 player.hp = 200.0; 
                 Ok(())
-            },
-            ..Default::default()
-        };
+            }
+        );
 
         let mut items = vec![item];
         let mut creatures = vec![]; // Pusty wektor creatures
@@ -36,17 +35,16 @@ mod tests {
         player.physics.x = 100.0;
         player.physics.y = 10.0;
 
-        let item = Item {
-            x: 10.0,
-            y: 10.0,
-            w: 10.0,
-            h: 10.0,
-            action: |player: &mut Player| {
+        let item = Item::new(
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            |player: &mut Player| {
                 player.hp = 200.0; 
                 Ok(())
-            },
-            ..Default::default()
-        };
+            }
+        );
 
         let mut items = vec![item];
         let mut creatures = vec![]; // Pusty wektor creatures

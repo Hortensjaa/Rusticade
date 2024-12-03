@@ -4,6 +4,7 @@ mod tests {
     use rusticade::shared::config::Config;
     use rusticade::objects::platform::Platform;
     use rusticade::player::player::Player;
+    use rusticade::shared::customisable::Customisable;
 
     fn mock_config() -> Arc<Config> {
         Arc::new(Config::default())
