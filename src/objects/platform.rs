@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use ggez::{graphics::{Color, Image}, GameError};
 
-use crate::{player::player::Player, utils::{collidable::Collidable, directions::Direction::{self, *}, drawable::DrawableClass}};
+use crate::{player::player::Player, shared::{collidable::Collidable, directions::Direction::{self, *}, drawable::DrawableClass}};
 use super::object_graphics::StaticGraphics;
 
 

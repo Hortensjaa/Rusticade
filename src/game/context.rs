@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use ggez::{event::EventLoop, ContextBuilder, GameResult, conf::{WindowMode, WindowSetup}};
-use crate::config::Config;
+use crate::shared::config::Config;
 
 pub fn game_context(
     name: &str,

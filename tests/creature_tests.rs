@@ -2,7 +2,7 @@
 mod tests {
     use std::sync::Arc;
 
-    use rusticade::{config::Config, creatures::creature::Creature};
+    use rusticade::{shared::config::Config, creatures::creature::Creature};
 
     fn test_creature_moves_returns_to_start(vec: Vec<(f32, f32)>, steps: i32) {
         let config = Arc::new(Config {
@@ -11,18 +11,18 @@ mod tests {
         });
         let mut creature = Creature::new(
             0.0, 0.0, 10.0, 10.0,
-            vec, 50.0, |_| Ok(()),config,
+            vec, 50.0, |_| Ok(true),config,
         );
 
         for _ in 0..steps {
             creature.update().unwrap();
-            if creature.x.abs() <= creature.vx.abs() / 2.0 && creature.y.abs() <= creature.vy.abs() / 2.0 {
+            if creature.physics.x.abs() <= creature.physics.vx.abs() / 2.0 && creature.physics.y.abs() <= creature.physics.vy.abs() / 2.0 {
                 break;
             }
         }
 
-        assert!((creature.x).abs() <= creature.vy.abs() / 2.0, "Creature did not return to starting x position");
-        assert!((creature.y).abs() <= creature.vx.abs() / 2.0, "Creature did not return to starting y position");
+        assert!((creature.physics.x).abs() <= creature.physics.vy.abs() / 2.0, "Creature did not return to starting x position");
+        assert!((creature.physics.y).abs() <= creature.physics.vx.abs() / 2.0, "Creature did not return to starting y position");
     }
 
     #[test]

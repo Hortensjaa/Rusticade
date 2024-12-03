@@ -1,6 +1,6 @@
 use ggez::{graphics, Context, GameResult};
 
-use crate::{game::game::Game, utils::drawable::DrawableClass};
+use crate::{game::game::Game, shared::drawable::DrawableClass};
 
 
 impl Game {
@@ -55,7 +55,7 @@ impl Game {
                     canvas.draw(&img, draw_param);
                 }
                 _ => {
-                    let mesh = creature.draw_ellipse(ctx)?;
+                    let mesh = creature.draw_rectangle(ctx)?;
                     canvas.draw(&mesh, graphics::DrawParam::default());
                 }
             }

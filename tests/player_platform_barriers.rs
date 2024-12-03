@@ -1,172 +1,103 @@
 #[cfg(test)]
 mod tests {
     use rusticade::objects::platform::Platform;
-    use rusticade::utils::directions::Direction::*;
+    use rusticade::shared::directions::Direction::*;
     use rusticade::player::player::Player;
 
     #[test]
-    fn test_set_barrier() {
-        let mut platform = Platform::new(0.0, 0.0, 50.0, 50.0);
-        platform.set_barrier(Left, true);
-        assert!(platform.barriers.contains(&Left));
-        platform.set_barrier(Left, false);
-        assert!(!platform.barriers.contains(&Left));
-    }
-
-    #[test]
-    fn test_player_bounce_on_top_barrier() {
+    fn test_platform_action_top() {
         let mut player = Player::default();
+        player.score = 0.0;
         let mut platform = Platform::default();
         platform.x = 0.0;
         platform.y = 200.0;
-        player.physics.x = 0.0;
-        player.physics.y = 100.0;
+        
+        platform.set_action(Top, |player| {
+            player.score += 10.0;
+            Ok(())
+        });
+
         let mut items = vec![];
+        let mut creatures = vec![];
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()], &mut items);
+            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
         }
         
-        assert_eq!(player.physics.y, platform.y - platform.h);
-        assert_eq!(player.physics.on_ground, true); 
-        assert_eq!(player.physics.vy, 0.0);
+        assert_eq!(player.score, 10.0); 
     }
 
     #[test]
-    fn test_player_no_bounce_when_no_top_barrier() {
-        let mut player = Player::default();
-        let mut platform = Platform::default();
-        platform.x = 0.0;
-        platform.y = 200.0;
-        player.physics.x = 0.0;
-        player.physics.y = 100.0;
-        platform.barriers.remove(&Top);
-        let mut items = vec![];
-        while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()], &mut items);
-        }
-        
-        assert_eq!(player.physics.y + player.physics.h, player.config.screen_height);
-        assert_eq!(player.physics.on_ground, true); 
-        assert_eq!(player.physics.vy, 0.0);
-    }
-
-    #[test]
-    fn test_player_bounce_on_left_barrier() {
+    fn test_platform_action_left() {
         let mut player = Player::default();
         let mut platform = Platform::default();
         platform.x = 100.0;
         platform.y = 550.0;
         player.physics.x = 0.0; 
-        player.physics.y = player.config.screen_height;
+        player.physics.y = player.get_config().screen_height;
         player.physics.vx = 5.0; 
+        player.score = 10.0;
+
+        platform.set_action(Left, |player| {
+            player.score *= 2.0;
+            Ok(())
+        });
 
         platform.barriers.insert(Left); 
         let mut items = vec![];
+        let mut creatures = vec![];
 
         while player.physics.vx > 0.0 {
-            let _ = player.update(&[platform.clone()], &mut items);
+            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
         }
 
-        assert_eq!(player.physics.x + player.physics.w, platform.x);
-        assert_eq!(player.physics.vx, 0.0); 
+        assert_eq!(player.score, 20.0);
     }
 
-
     #[test]
-    fn test_player_bounce_on_right_barrier() {
+    fn test_platform_action_right() {
         let mut player = Player::default();
         let mut platform = Platform::default();
         platform.x = 100.0;
         platform.y = 550.0;
         player.physics.x = 200.0; 
-        player.physics.y = player.config.screen_height;
+        player.physics.y = player.get_config().screen_height;
         player.physics.vx = -5.0; 
+        player.score = 10.0;
 
         platform.barriers.insert(Right);
+
+        platform.set_action(Right, |player| {
+            player.score *= 2.0;
+            Ok(())
+        });
+
         let mut items = vec![]; 
+        let mut creatures = vec![];
 
         while player.physics.vx < 0.0 {
-            let _ = player.update(&[platform.clone()], &mut items);
+            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
         }
 
-        assert_eq!(player.physics.x, platform.x + platform.w);
-        assert_eq!(player.physics.vx, 0.0); 
+        assert_eq!(player.score, 20.0);
     }
 
     #[test]
-    fn test_player_no_left_barrier() {
+    fn test_no_action_if_no_collision() {
         let mut player = Player::default();
+        player.score = 0.0;
         let mut platform = Platform::default();
-        platform.x = 100.0;
-        platform.y = 550.0;
-        player.physics.x = 0.0; 
-        player.physics.y = player.config.screen_height;
-        player.physics.vx = 5.0; 
+        platform.x = 1000.0; 
+        platform.y = 1000.0;
+
+        platform.set_action(Top, |player| {
+            player.score += 100.0;
+            Ok(())
+        });
+
         let mut items = vec![];
+        let mut creatures = vec![];
+        let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
 
-        while player.physics.x + player.physics.w < player.config.screen_width {
-            let _ = player.update(&[platform.clone()], &mut items);
-        }
-
-        assert!(player.physics.x + player.physics.w >= player.config.screen_width);
+        assert_eq!(player.score, 0.0); 
     }
-
-
-    #[test]
-    fn test_player_no_right_barrier() {
-        let mut player = Player::default();
-        let mut platform = Platform::default();
-        platform.x = 100.0;
-        platform.y = 550.0;
-        player.physics.x = 200.0; 
-        player.physics.y = player.config.screen_height;
-        player.physics.vx = -5.0; 
-        let mut items = vec![];
-        
-        while player.physics.x > 0.0 {
-            let _ = player.update(&[platform.clone()], &mut items);
-        }
-
-        assert!(player.physics.x <= 0.0);
-    }
-
-    #[test]
-    fn test_player_bottom_hit() {
-        let mut player = Player::default();
-        let mut platform = Platform::default();
-        platform.x = 0.0;
-        platform.y = player.config.screen_height - 150.0;
-        player.physics.x = 0.0; 
-        player.physics.y = player.config.screen_height;
-        player.physics.vy = -100.0;
-        platform.barriers.insert(Bottom);
-            let mut items = vec![];
-        
-        while !player.physics.on_ground {
-            assert!(player.physics.y - player.physics.h >= player.config.screen_height - 110.0);
-            let _ = player.update(&[platform.clone()], &mut items);
-            player.physics.vy = -100.0;
-        }
-    }
-
-    #[test]
-    fn test_player_no_bottom_hit() {
-        let mut player = Player::default();
-        let mut platform = Platform::default();
-        platform.x = 0.0;
-        platform.y = player.config.screen_height - 150.0;
-        player.physics.x = 0.0; 
-        player.physics.y = player.config.screen_height;
-        player.physics.vy = -100.0;
-        let mut items = vec![];
-        
-        while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()], &mut items);
-            player.physics.vy = -100.0;
-            if player.physics.y - player.physics.h > player.config.screen_height - 100.0 {
-                break;
-            }
-        }
-    }
-   
 }

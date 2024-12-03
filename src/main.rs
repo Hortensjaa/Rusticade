@@ -1,6 +1,5 @@
 mod game;
-mod utils;
-mod config;
+mod shared;
 mod objects;
 mod creatures;
 mod player;
@@ -8,18 +7,21 @@ mod player;
 use std::sync::Arc;
 
 use creatures::creature::Creature;
+use creatures::creature_macros::create_creature;
 use objects::item::Item;
 use objects::platform::Platform;
-use utils::directions::Direction::*;
-use player::player::{create_player, Player};
-use config::Config;
+use shared::directions::Direction::*;
+use player::player::{Player};
+use player::player_macros::{create_player};
+use shared::config::Config;
 use ggez::{event, GameResult, GameError};
 use game::context::create_game_context;
 use game::game::Game;
 
 
 fn main() -> GameResult {
-    let config = Arc::new(Config {gravity: 100.0, ..Config::default()});
+    let config = Arc::new(Config::default());
+
     let (ctx, event_loop) = create_game_context!("Moja gra", "Julia Kulczycka", config.clone())?;
 
     let mut superplatform = Platform::new(250.0, 320.0, 80.0, 80.0);
@@ -38,17 +40,18 @@ fn main() -> GameResult {
     let mut player = create_player!(0.0, 0.0, config.clone());
     let mut platform = Platform::default();
     platform.x = 100.0;
-        platform.y = 550.0;
-        player.physics.x = 200.0; 
-        player.physics.y = player.config.screen_height;
+    platform.y = 550.0;
+    player.physics.x = 200.0; 
+    player.physics.y = player.get_config().screen_height;
 
-        platform.barriers.insert(Right);
-        platform.barriers.insert(Left);
-    let moves = Vec::from([(0.0, -200.0), (0.0, 200.0)]);
-    // let moves = Vec::from([(100.0, 50.0), (-100.0, -50.0)]);
-    // let moves = Vec::from([(100.0, -50.0), (-100.0, 50.0)]);
-    let creature = Creature::new(600.0, player.config.screen_height, 50.0, 50.0, 
-        moves, 500.0, |_| Ok(()), config.clone());
+    platform.barriers.insert(Right);
+    platform.barriers.insert(Left);
+
+    let creature_action = |_p: &mut Player| {println!("auuuu"); Ok(true)};
+
+    let moves = Vec::from([]);
+    let creature = Creature::new(600.0, player.get_config().screen_height, 20.0, 20.0, 
+        moves, 300.0, creature_action, config.clone());
     let mut game = Game::new(player, config)?;
     game.add_creature(creature);
     game.add_platform(platform);

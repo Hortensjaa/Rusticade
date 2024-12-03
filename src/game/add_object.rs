@@ -3,7 +3,7 @@ use ggez::GameError;
 use crate::creatures::creature::Creature;
 use crate::player::player::Player;
 use crate::objects::{platform::Platform, item::Item};
-use crate::utils::directions::Direction;
+use crate::shared::directions::Direction;
 
 use super::game::Game;
 
@@ -20,7 +20,7 @@ impl Game {
 
     pub fn add_platform_default_size(&mut self, x: f32, y: f32) {
         let platform = Platform::new(
-            x, y, self.config.grid_cell_width, self.config.grid_cell_height
+            x, y, self.get_config().grid_cell_width, self.get_config().grid_cell_height
         );
         self.platforms.push(platform);
     }   
@@ -46,7 +46,7 @@ impl Game {
 
     pub fn add_item_default_size(&mut self, x: f32, y: f32, action: fn(&mut Player) -> Result<(), GameError>) {
         let item = Item::new(
-            x, y, self.config.grid_cell_width, self.config.grid_cell_height, action
+            x, y, self.get_config().grid_cell_width, self.get_config().grid_cell_height, action
         );
         self.items.push(item);
     }    

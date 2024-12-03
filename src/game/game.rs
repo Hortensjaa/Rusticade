@@ -8,14 +8,14 @@ use ggez::{Context, GameResult};
 use crate::creatures::creature::Creature;
 use crate::objects::{platform::Platform, item::Item};
 use crate::player::player::Player;
-use crate::config::Config;
+use crate::shared::config::Config;
 
 pub struct Game {
     pub player: Player,
     pub platforms: Vec<Platform>,
     pub items: Vec<Item>,
     pub creatures: Vec<Creature>,
-    pub(super) config: Arc<Config>
+    config: Arc<Config>
 }
 
 impl Game {
@@ -31,11 +31,15 @@ impl Game {
             _ => Ok(()),
         }
     }
+
+    pub fn get_config(&self) -> &Arc<Config> {
+        &self.config
+    }
 }
 
 impl EventHandler for Game {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        let e = self.player.update(&self.platforms, &mut self.items);
+        let e = self.player.update(&self.platforms, &mut self.items, &mut self.creatures);
         match e {
             Ok(()) => {
                 for c in self.creatures.iter_mut() {

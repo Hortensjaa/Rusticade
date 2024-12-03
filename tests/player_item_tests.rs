@@ -22,8 +22,9 @@ mod tests {
         };
 
         let mut items = vec![item];
+        let mut creatures = vec![]; // Pusty wektor creatures
 
-        player.update(&[], &mut items).unwrap();
+        player.update(&[], &mut items, &mut creatures).unwrap();
 
         assert_eq!(player.hp, 200.0);
         assert!(items.is_empty());
@@ -48,8 +49,9 @@ mod tests {
         };
 
         let mut items = vec![item];
+        let mut creatures = vec![]; // Pusty wektor creatures
 
-        player.update(&[], &mut items).unwrap();
+        player.update(&[], &mut items, &mut creatures).unwrap();
         assert_ne!(player.hp, 200.0);
         assert_eq!(items.len(), 1);
     }

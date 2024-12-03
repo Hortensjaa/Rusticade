@@ -1,6 +1,6 @@
 use ggez::graphics::{Color, Image};
 
-use crate::utils::drawable::DrawableClass;
+use crate::shared::drawable::DrawableClass;
 
 use super::player::Player;
 

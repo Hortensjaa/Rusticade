@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use std::sync::Arc;
-    use rusticade::config::Config;
+    use rusticade::shared::config::Config;
     use rusticade::objects::platform::Platform;
     use rusticade::player::player::Player;
 
@@ -25,7 +25,7 @@ mod tests {
         let config = mock_config();
         let mut player = Player::new(0.0, 0.0, 50.0, 50.0, 5.0, 10.0, 100.0, config);
         let platform = Platform::new(0.0, 0.0, 100.0, 10.0); // mock platform
-        let result = player.update(&[platform], &mut vec![]);
+        let result = player.update(&[platform], &mut vec![], &mut vec![]);
 
         assert!(result.is_ok(), "Update should succeed");
     }
@@ -35,9 +35,9 @@ mod tests {
         let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 100.0, Arc::new(Config::default()));
 
         player.move_right().unwrap();
-        let _ = player.update(&[], &mut vec![]);  
+        let _ = player.update(&[], &mut vec![], &mut vec![]);  
 
-        assert_eq!(player.physics.x, 10.0 + 100.0 * player.config.delta_time); 
+        assert_eq!(player.physics.x, 10.0 + 100.0 * player.get_config().delta_time); 
     }
 
     #[test]
@@ -45,9 +45,9 @@ mod tests {
         let mut player = Player::new(10.0, 20.0, 50.0, 50.0, 100.0, 300.0, 100.0, Arc::new(Config::default()));
 
         player.move_left().unwrap();
-        let _ = player.update(&[], &mut vec![]);  
+        let _ = player.update(&[], &mut vec![], &mut vec![]);  
 
-        assert_eq!(player.physics.x, 10.0 - 100.0 * player.config.delta_time);  
+        assert_eq!(player.physics.x, 10.0 - 100.0 * player.get_config().delta_time);  
     }
 
     #[test]

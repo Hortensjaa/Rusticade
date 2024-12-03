@@ -1,4 +1,4 @@
-use rusticade::utils::collidable::*;
+use rusticade::shared::collidable::*;
 
 #[derive(Debug)]
 struct TestObject {

@@ -1,9 +1,9 @@
 use ggez::graphics::{Color, Image};
 use ggez::GameError;
 
-use crate::utils::collidable::Collidable;
+use crate::shared::collidable::Collidable;
 use crate::player::player::Player;
-use crate::utils::drawable::DrawableClass;
+use crate::shared::drawable::DrawableClass;
 use super::object_graphics::StaticGraphics;
 
 

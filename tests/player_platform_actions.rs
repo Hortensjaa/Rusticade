@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use rusticade::objects::platform::Platform;
-    use rusticade::utils::directions::Direction::*;
+    use rusticade::shared::directions::Direction::*;
     use rusticade::player::player::Player;
 
     #[test]
@@ -18,8 +18,9 @@ mod tests {
         });
 
         let mut items = vec![];
+        let mut creatures = vec![];
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()], &mut items);
+            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
         }
         
         assert_eq!(player.score, 10.0); 
@@ -32,7 +33,7 @@ mod tests {
         platform.x = 100.0;
         platform.y = 550.0;
         player.physics.x = 0.0; 
-        player.physics.y = player.config.screen_height;
+        player.physics.y = player.get_config().screen_height;
         player.physics.vx = 5.0; 
         player.score = 10.0;
 
@@ -43,9 +44,10 @@ mod tests {
 
         platform.barriers.insert(Left); 
         let mut items = vec![];
+        let mut creatures = vec![];
 
         while player.physics.vx > 0.0 {
-            let _ = player.update(&[platform.clone()], &mut items);
+            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
         }
 
         assert_eq!(player.score, 20.0);
@@ -58,7 +60,7 @@ mod tests {
         platform.x = 100.0;
         platform.y = 550.0;
         player.physics.x = 200.0; 
-        player.physics.y = player.config.screen_height;
+        player.physics.y = player.get_config().screen_height;
         player.physics.vx = -5.0; 
         player.score = 10.0;
 
@@ -70,9 +72,10 @@ mod tests {
         });
 
         let mut items = vec![]; 
+        let mut creatures = vec![];
 
         while player.physics.vx < 0.0 {
-            let _ = player.update(&[platform.clone()], &mut items);
+            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
         }
 
         assert_eq!(player.score, 20.0);
@@ -92,7 +95,8 @@ mod tests {
         });
 
         let mut items = vec![];
-        let _ = player.update(&[platform.clone()], &mut items);
+        let mut creatures = vec![];
+        let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
 
         assert_eq!(player.score, 0.0); 
     }

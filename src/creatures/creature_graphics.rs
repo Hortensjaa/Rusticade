@@ -1,6 +1,6 @@
 use ggez::graphics::{Color, Image};
 
-use crate::utils::drawable::DrawableClass;
+use crate::shared::drawable::DrawableClass;
 
 use super::creature::Creature;
 
@@ -29,10 +29,10 @@ impl DrawableClass for Creature {
     } 
 
     fn get_position(&self) -> (f32, f32) {
-        (self.x, self.y)
+        (self.physics.x, self.physics.y)
     }
 
     fn get_size(&self) -> (f32, f32) {
-        (self.w, self.h)
+        (self.physics.w, self.physics.h)
     }
 }
