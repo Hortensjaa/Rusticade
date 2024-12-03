@@ -14,7 +14,14 @@ use player::{player::Player, player_macros::create_player};
 use game::context::create_game_context;
 use game::game::Game;
 
+
+
 fn main() -> GameResult {
+    let move_player_right = |game: &mut Game|{
+        game.player.physics.x += 1.0; 
+        Ok(())
+    };
+
     // let config = Arc::new(Config::default());
     let config = Arc::new(Config{flying_mode: false, ..Config::default()});
     let (ctx, event_loop) = create_game_context!("Moja gra", "Julia Kulczycka", config.clone())?;
@@ -73,6 +80,7 @@ fn main() -> GameResult {
     game.add_item(item2);
     game.add_creature(creature1);
     game.add_creature(creature2);
+    game.action_before = Some(Box::new(move_player_right));
 
     event::run(ctx, event_loop, game)
 }

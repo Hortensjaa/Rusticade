@@ -15,8 +15,8 @@ pub struct Game {
     pub platforms: Vec<Platform>,
     pub items: Vec<Item>,
     pub creatures: Vec<Creature>,
-    pub action_before: fn() -> GameResult<()>,
-    pub action_after: fn() -> GameResult<()>,
+    pub action_before: Option<Box<dyn FnMut(&mut Game) -> GameResult<()> + 'static>>,
+    pub action_after: Option<Box<dyn FnMut(&mut Game) -> GameResult<()> + 'static>>,
     config: Arc<Config>
 }
 
@@ -38,13 +38,34 @@ impl Game {
     pub fn get_config(&self) -> &Arc<Config> {
         &self.config
     }
+
+    fn update_player(&mut self) -> GameResult<()> {
+        self.player.update(&self.platforms, &mut self.items, &mut self.creatures)
+    }
+
+    fn run_action_before(&mut self) -> GameResult<()> {
+        if let Some(mut action) = self.action_before.take() {
+            action(self)?; // Wywołanie akcji po
+            self.action_after = Some(action);
+        }
+        Ok(())
+    }
+
+    fn run_action_after(&mut self) -> GameResult<()> {
+        if let Some(mut action) = self.action_after.take() {
+            action(self)?; // Wywołanie akcji po
+            self.action_after = Some(action);
+        }
+        Ok(())
+    }
 }
 
 impl EventHandler for Game {
+    
 
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        (self.action_before)()?; 
-        self.player.update(&self.platforms, &mut self.items, &mut self.creatures)?;
+        self.run_action_before()?;
+        self.update_player()?;
         for c in self.creatures.iter_mut() {
             match c.update() {
                 Ok(()) => continue, 
@@ -54,7 +75,8 @@ impl EventHandler for Game {
                 }
             }
         }
-        (self.action_after)()
+        self.run_action_after()?;
+        Ok(())
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
@@ -101,8 +123,8 @@ impl Default for Game {
             items: Vec::new(),
             creatures: Vec::new(),
             config: Arc::new(Config::default()),
-            action_after: || Ok(()),
-            action_before: || Ok(())
+            action_before: None,
+            action_after: None
         }
     }
 }
