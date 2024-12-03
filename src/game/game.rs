@@ -28,6 +28,7 @@ impl Game {
             KeyCode::Up | KeyCode::W => self.player.jump(),
             KeyCode::Left | KeyCode::A => self.player.move_left(),
             KeyCode::Right | KeyCode::D => self.player.move_right(),
+            KeyCode::Down | KeyCode::S => self.player.move_down(),
             _ => Ok(()),
         }
     }
@@ -82,6 +83,9 @@ impl EventHandler for Game {
         if let Some(key) = input.keycode {
             match key {
                 KeyCode::Left | KeyCode::A | KeyCode::Right | KeyCode::D => self.player.stop()?,
+                KeyCode::S | KeyCode::Down | KeyCode::W | KeyCode::Up => if self.config.flying_mode {
+                    self.player.stop()?
+                }
                 _ => (),
             };
         }

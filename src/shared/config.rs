@@ -13,7 +13,7 @@ pub struct Config {
     // przysics options
     pub gravity: f32,
     pub delta_time: f32,
-    pub allow_flying: bool,
+    pub flying_mode: bool,
     pub max_score: f32,
 
     // manipulation options
@@ -34,7 +34,7 @@ impl Default for Config {
             grid_cell_width: 50.0,
             grid_cell_height: 50.0,
             gravity: 25.0,
-            allow_flying: false,
+            flying_mode: false,
             delta_time: 1.0 / 40.0,
             max_score: f32::MAX,
             fixed_x: false,
