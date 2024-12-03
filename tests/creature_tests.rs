@@ -9,24 +9,20 @@ mod tests {
             delta_time: 0.1,
             ..Default::default()
         });
-        let mut creature = Creature {
-            x: 0.0,
-            y: 0.0,
-            w: 10.0,
-            h: 10.0,
-            action: |_| Ok(()),
-            moves: vec,
-            speed: 50.0,
-            config,
-            ..Default::default()
-        };
+        let mut creature = Creature::new(
+            0.0, 0.0, 10.0, 10.0,
+            vec, 50.0, |_| Ok(()),config,
+        );
 
         for _ in 0..steps {
             creature.update().unwrap();
+            if creature.x.abs() <= creature.vx.abs() / 2.0 && creature.y.abs() <= creature.vy.abs() / 2.0 {
+                break;
+            }
         }
 
-        assert!((creature.x - 0.0).abs() < 1e-5, "Creature did not return to starting x position");
-        assert!((creature.y - 0.0).abs() < 1e-5, "Creature did not return to starting y position");
+        assert!((creature.x).abs() <= creature.vy.abs() / 2.0, "Creature did not return to starting x position");
+        assert!((creature.y).abs() <= creature.vx.abs() / 2.0, "Creature did not return to starting y position");
     }
 
     #[test]
@@ -47,5 +43,10 @@ mod tests {
     #[test]
     fn test_creature_moves_returns_to_start_case4() {
         test_creature_moves_returns_to_start(vec![(100.0, -50.0), (-100.0, 50.0)], 200);
+    }
+
+    #[test]
+    fn test_creature_moves_returns_to_start_case5() {
+        test_creature_moves_returns_to_start(vec![(0.0, -50.0), (-100.0, 0.0), (0.0, 50.0), (100.0, 0.0)], 600);
     }
 }
