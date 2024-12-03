@@ -16,7 +16,7 @@ use game::game::Game;
 
 fn main() -> GameResult {
     // let config = Arc::new(Config::default());
-    let config = Arc::new(Config{flying_mode: true, ..Config::default()});
+    let config = Arc::new(Config{flying_mode: false, ..Config::default()});
     let (ctx, event_loop) = create_game_context!("Moja gra", "Julia Kulczycka", config.clone())?;
 
     // Tworzenie gracza

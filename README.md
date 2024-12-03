@@ -39,6 +39,12 @@ oraz domyślne parametry:
 ## Możliwości 
 1. Każdy obiekt (Player, Creature, Item, Platform) posiada mutowalny słownik własności (props), który może być dowolnie dostosowywany przez użytkownika. Daje to możliwość reprezentowania stanu i logiki akcji zależnej od tego stanu.
 2. Domyślnie obiekty reprezentowane są jako kolorowe kwadraty, ale mogą to być też obrazy wprowadzone przez użytkownika.
+3. Tryb latania (flying mode) - bez grawitacji
+4. Dodanie dodatkowej logiki do aktualizacji stanu gry przed i po wywołaniu Game::update()
+
+## Przykłady
+1. Spychające stworki - zbierz wszystkie monety
+2. Labirynt - bez grawitacji, jeśli jakiś zwierzak cię dotknie - przegrywasz
 
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki

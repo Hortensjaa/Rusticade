@@ -15,6 +15,8 @@ pub struct Game {
     pub platforms: Vec<Platform>,
     pub items: Vec<Item>,
     pub creatures: Vec<Creature>,
+    pub action_before: fn() -> GameResult<()>,
+    pub action_after: fn() -> GameResult<()>,
     config: Arc<Config>
 }
 
@@ -39,26 +41,20 @@ impl Game {
 }
 
 impl EventHandler for Game {
+
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        let e = self.player.update(&self.platforms, &mut self.items, &mut self.creatures);
-        match e {
-            Ok(()) => {
-                for c in self.creatures.iter_mut() {
-                    match c.update() {
-                        Ok(()) => continue, 
-                        Err(_) => {
-                            _ctx.request_quit(); 
-                            return Ok(()); 
-                        }
-                    }
+        (self.action_before)()?; 
+        self.player.update(&self.platforms, &mut self.items, &mut self.creatures)?;
+        for c in self.creatures.iter_mut() {
+            match c.update() {
+                Ok(()) => continue, 
+                Err(_) => {
+                    _ctx.request_quit(); 
+                    return Ok(()); 
                 }
-                Ok(())
-            },
-            _ => {
-                _ctx.request_quit();
-                Ok(())
             }
         }
+        (self.action_after)()
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
@@ -104,7 +100,9 @@ impl Default for Game {
             platforms: Vec::new(),
             items: Vec::new(),
             creatures: Vec::new(),
-            config: Arc::new(Config::default())
+            config: Arc::new(Config::default()),
+            action_after: || Ok(()),
+            action_before: || Ok(())
         }
     }
 }
