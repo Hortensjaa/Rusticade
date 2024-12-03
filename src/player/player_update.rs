@@ -12,43 +12,42 @@ impl Player {
         }
 
         if !self.physics.on_ground {
-            self.physics.vy += self.get_config().gravity * self.get_config().delta_time;
+            self.physics.vy += self.get_config().gravity / 100.0;
         }
 
-        self.physics.x += self.physics.vx * self.get_config().delta_time;
-        self.physics.y += self.physics.vy * self.get_config().delta_time;
+        self.physics.x += self.physics.vx;
+        self.physics.y += self.physics.vy;
 
-        let epsilon = self.physics.vy.abs() * self.get_config().delta_time + 0.1;
         self.physics.on_ground = false;
         for platform in platforms {
-            if self.is_on_top_of(platform, epsilon) {
+            if self.is_on_top_of(platform, self.physics.vy.abs()) {
                 if  platform.barriers.contains(&Top) {
-                    self.physics.y = platform.y - self.physics.h; 
-                    self.physics.vy = 0.0;
+                    self.physics.y = platform.y - self.physics.h - 0.1; 
+                    self.physics.vy = self.physics.vy.min(0.0);
                     self.physics.on_ground = true;
                 }
                 platform.do_action(&Top, self)?;
                 break;
             }
-            if self.is_at_bottom_of(platform, epsilon) {
+            if self.is_at_bottom_of(platform, self.physics.vy.abs()) {
                 if platform.barriers.contains(&Direction::Bottom) {
-                    self.physics.y = platform.y + platform.h + 1.0; 
-                    self.physics.vy = 0.0;
+                    self.physics.y = platform.y + platform.h + 0.1; 
+                    self.physics.vy = self.physics.vy.max(0.0);
                 }
                 platform.do_action(&Bottom, self)?;
                 break;
             }
-            if self.is_touching_left_of(platform, epsilon) || self.is_colliding_from_left(platform) {
+            if self.is_touching_left_of(platform, self.physics.vx.abs()) {
                 if platform.barriers.contains(&Direction::Left) {
-                    self.physics.x = platform.x - self.physics.w; 
+                    self.physics.x = platform.x - self.physics.w - 0.1; 
                     self.physics.vx = 0.0;
                 }
                 platform.do_action(&Left, self)?;
                 break;
             }
-            if self.is_touching_right_of(platform, epsilon) || self.is_colliding_from_right(platform) {
+            if self.is_touching_right_of(platform, self.physics.vx.abs()) {
                 if platform.barriers.contains(&Direction::Right) {
-                    self.physics.x = platform.x + platform.w; 
+                    self.physics.x = platform.x + platform.w + 0.1; 
                     self.physics.vx = 0.0;
                 }
                 platform.do_action(&Right, self)?;
@@ -65,15 +64,20 @@ impl Player {
         }
 
         for i in (0..creatures.len()).rev() {
-            let c = &mut creatures[i];
-            if self.is_colliding_with(c) {
-                let res = c.do_action(self)?;
-                match res {
-                    true => {}
-                    false => {creatures.remove(i);}
+            let creature = &mut creatures[i];
+            if self.is_colliding_with(creature) {
+                if !creature.triggered {
+                    let res = creature.do_action(self)?;
+                    creature.triggered = true;
+                    if !res {
+                        creatures.remove(i);
+                    }
                 }
+            } else {
+                creature.triggered = false;
             }
         }
+        
 
         self.physics.x = self.physics.x.clamp(0.0, self.get_config().screen_width - self.physics.w);
         if self.physics.x == self.get_config().screen_width - self.physics.w {
@@ -92,10 +96,9 @@ impl Player {
     }
 
     pub fn jump(&mut self) -> Result<(), GameError> {
-        let epsilon = self.physics.vy.abs() * self.get_config().delta_time + 1.0;
         if self.physics.on_ground {
             self.physics.vy = -self.physics.jump; 
-            self.physics.y -= epsilon;
+            self.physics.y += self.physics.vy;
             self.physics.on_ground = false;
         }
         Ok(())

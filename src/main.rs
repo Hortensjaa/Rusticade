@@ -20,7 +20,7 @@ use game::game::Game;
 
 
 fn main() -> GameResult {
-    let config = Arc::new(Config::default());
+    let config = Arc::new(Config {gravity: 0.0, ..Config::default()});
 
     let (ctx, event_loop) = create_game_context!("Moja gra", "Julia Kulczycka", config.clone())?;
 
@@ -43,15 +43,17 @@ fn main() -> GameResult {
     platform.y = 550.0;
     player.physics.x = 200.0; 
     player.physics.y = player.get_config().screen_height;
+    player.physics.speed = 5.0;
+    player.physics.jump = 12.0;
 
     platform.barriers.insert(Right);
     platform.barriers.insert(Left);
 
     let creature_action = |_p: &mut Player| {println!("auuuu"); Ok(true)};
 
-    let moves = Vec::from([]);
-    let creature = Creature::new(600.0, player.get_config().screen_height, 20.0, 20.0, 
-        moves, 300.0, creature_action, config.clone());
+    let moves = Vec::from([(0.0, -50.0), (-100.0, 0.0), (0.0, 50.0), (100.0, 0.0)]);
+    let creature = Creature::new(600.0, player.get_config().screen_height/2.0, 20.0, 20.0, 
+        moves, 5.0, creature_action);
     let mut game = Game::new(player, config)?;
     game.add_creature(creature);
     game.add_platform(platform);

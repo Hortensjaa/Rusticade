@@ -38,7 +38,7 @@ mod tests {
         player.move_right().unwrap();
         let _ = player.update(&[], &mut vec![], &mut vec![]);  
 
-        assert_eq!(player.physics.x, 10.0 + 100.0 * player.get_config().delta_time); 
+        assert!(player.physics.x > 10.0); 
     }
 
     #[test]
@@ -48,7 +48,7 @@ mod tests {
         player.move_left().unwrap();
         let _ = player.update(&[], &mut vec![], &mut vec![]);  
 
-        assert_eq!(player.physics.x, 10.0 - 100.0 * player.get_config().delta_time);  
+        assert!(player.physics.x < 10.0);  
     }
 
     #[test]

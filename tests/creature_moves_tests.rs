@@ -1,17 +1,12 @@
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
-
-    use rusticade::{shared::config::Config, creatures::creature::Creature};
+    use rusticade::creatures::creature::Creature;
 
     fn test_creature_moves_returns_to_start(vec: Vec<(f32, f32)>, steps: i32) {
-        let config = Arc::new(Config {
-            delta_time: 0.1,
-            ..Default::default()
-        });
+
         let mut creature = Creature::new(
             0.0, 0.0, 10.0, 10.0,
-            vec, 50.0, |_| Ok(true),config,
+            vec, 50.0, |_| Ok(true),
         );
 
         for _ in 0..steps {

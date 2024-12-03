@@ -41,9 +41,9 @@ impl Default for Item {
         Item {
             x: 0.0,
             y: 0.0,
-            w: 50.0,
-            h: 50.0,
-            graphics: StaticGraphics::default(),
+            w: 30.0,
+            h: 30.0,
+            graphics: StaticGraphics{color: Color::YELLOW, ..Default::default()},
             action: |_p: &mut Player| Ok(()),
             props: HashMap::new()
         }

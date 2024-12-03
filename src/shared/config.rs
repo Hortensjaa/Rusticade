@@ -16,6 +16,11 @@ pub struct Config {
     pub allow_flying: bool,
     pub max_score: f32,
 
+    // manipulation options
+    pub awsd: bool,
+    pub arrows: bool,
+    pub mouse: bool,
+
     // camera options (fixed means always focusing on player)
     pub fixed_x: bool,
     pub fixed_y: bool,
@@ -28,12 +33,15 @@ impl Default for Config {
             screen_height: 600.0,
             grid_cell_width: 50.0,
             grid_cell_height: 50.0,
-            gravity: 400.0,
+            gravity: 25.0,
             allow_flying: false,
             delta_time: 1.0 / 40.0,
             max_score: f32::MAX,
             fixed_x: false,
             fixed_y: false,
+            awsd: true,
+            arrows: true,
+            mouse: false,
         }
     }
 }

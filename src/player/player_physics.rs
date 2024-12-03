@@ -8,7 +8,8 @@ pub struct PlayerPhysics {
     pub vy: f32,
     pub on_ground: bool,
     pub speed: f32,
-    pub jump: f32
+    pub jump: f32,
+    pub attacked: bool
 }
 
 impl PlayerPhysics {
@@ -27,6 +28,7 @@ impl Default for PlayerPhysics {
             vx: 0.0,
             vy: 0.0,
             on_ground: false,
+            attacked: false,
             speed: 100.0,
             jump: 400.0,
         }

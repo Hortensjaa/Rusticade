@@ -35,6 +35,11 @@ oraz domyślne parametry:
 1. Potworki poruszają się po torze zdefiniowanym jako listy wektorów (ignorują kolizje i prawa fizyki).
 2. Po kolizji wykonuje się akcja zdefniowana przez użytkownika; jeżeli zwróci 'false', to creature zostaje usunięty z listy ("pokonany").
 
+
+## Możliwości 
+1. Każdy obiekt (Player, Creature, Item, Platform) posiada mutowalny słownik własności (props), który może być dowolnie dostosowywany przez użytkownika. Daje to możliwość reprezentowania stanu i logiki akcji zależnej od tego stanu.
+2. Domyślnie obiekty reprezentowane są jako kolorowe kwadraty, ale mogą to być też obrazy wprowadzone przez użytkownika.
+
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki
 - [x] kolizja gracza i platformy
@@ -43,13 +48,10 @@ oraz domyślne parametry:
 - [x] grafiki
 - [x] itemy
 - [x] dodawanie graczowi własnych pól (np. pieniędzy)
-- [ ] poprawić fizykę góra-dół
+- [x] poprawić fizykę góra-dół
 - [ ] dodawanie dodatkowej logiki do pętli zdarzeń (np. score == 100 jako koniec gry)
 - [ ] mniej boilerplatu przy tworzeniu gry (przekazywanie configu i kontekstu? żal)
+- [ ] grafika - wczytywanie z pliku
+- [x] wyrzucenie timedelty
+- [ ] posprzątanie configu (na koniec)
 
-## Rozwinięcie
-- [ ] efekty specjalne (spowolnienie przez określony czas, zatrucie itd.)
-
-## Dodatki
-- nieskonczone generowanie platform (możliwość dla gracza)
-- rodzaje kamery gracza (dynamic, fixedX, fixedY)

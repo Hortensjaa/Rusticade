@@ -13,7 +13,7 @@ pub struct CreatureGraphics {
 impl Default for CreatureGraphics {
     fn default() -> Self {
         CreatureGraphics {
-            color: Color::YELLOW,
+            color: Color::MAGENTA,
             basic: None,
         }
     }

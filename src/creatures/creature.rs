@@ -1,11 +1,10 @@
 use std::collections::HashMap;
-use std::sync::Arc;
 
 use ggez::GameError;
 
 use crate::shared::collidable::Collidable;
 use crate::shared::customisable::Customisable;
-use crate::{shared::config::Config, player::player::Player};
+use crate::player::player::Player;
 
 use super::creature_graphics::CreatureGraphics;
 use super::creature_physics::CreaturePhysics;
@@ -16,21 +15,21 @@ pub struct Creature {
     pub physics: CreaturePhysics,
     pub action: fn(&mut Player) -> Result<bool, GameError>,
     pub graphics: CreatureGraphics,
+    pub triggered: bool,
     props: HashMap<String, f32>, 
-    config: Arc<Config>,
 }
 
 impl Creature {
     pub fn new(
         x: f32, y: f32, w: f32, h: f32,
         moves: Vec<(f32, f32)>, speed: f32,
-        action: fn(&mut Player) -> Result<bool, GameError>,
-        config: Arc<Config>
+        action: fn(&mut Player) -> Result<bool, GameError>
     ) -> Self {    
         Creature { 
             physics: CreaturePhysics::new(x, y, w, h, moves, speed), 
-            action, config, props: HashMap::new(),
-            graphics: CreatureGraphics::default()
+            action, props: HashMap::new(),
+            graphics: CreatureGraphics::default(),
+            triggered: false
         }
     }
 
@@ -50,8 +49,8 @@ impl Creature {
             };
         
             let magnitude = (self.physics.moves[0].0.powi(2) + self.physics.moves[0].1.powi(2)).sqrt();
-            self.physics.vx = self.physics.moves[0].0 / magnitude * self.physics.speed * self.config.delta_time;
-            self.physics.vy = self.physics.moves[0].1 / magnitude * self.physics.speed * self.config.delta_time;
+            self.physics.vx = self.physics.moves[0].0 / magnitude * self.physics.speed;
+            self.physics.vy = self.physics.moves[0].1 / magnitude * self.physics.speed;
         }
         
         self.physics.x += self.physics.vx;
@@ -64,7 +63,10 @@ impl Creature {
     }
 
     pub fn do_action(&self, player: &mut Player) -> Result<bool, GameError> {
-        (self.action)(player)  
+        match self.triggered {
+            true => Ok(true),
+            false => (self.action)(player) 
+        }         
     }
 }
 

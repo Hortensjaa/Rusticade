@@ -18,7 +18,7 @@ pub struct PlayerGraphics {
 impl Default for PlayerGraphics {
     fn default() -> Self {
         PlayerGraphics {
-            color: Color::RED,
+            color: Color::WHITE,
             basic: None,
             left: None,
             right: None,
