@@ -12,7 +12,7 @@ pub struct Player {
     pub hp: f32,
     pub score: f32,
     pub graphics: PlayerGraphics,
-    props: HashMap<String, f32>,
+    properties: HashMap<String, f32>,
     config: Arc<Config>,
 }
 
@@ -49,7 +49,7 @@ impl Default for Player {
             physics: PlayerPhysics::default(),
             hp: 100.0,
             score: 0.0,
-            props: HashMap::new(),
+            properties: HashMap::new(),
             config: Arc::new(Config::default()),
             graphics: PlayerGraphics::default()
         }
@@ -70,11 +70,11 @@ impl Collidable for Player {
 impl Customisable for Player {
 
     fn update_property(&mut self, key: &str, val: f32) {
-        self.props.insert(key.to_string(), val);
+        self.properties.insert(key.to_string(), val);
     }
 
     fn get_property(&self, key: &str) -> f32 {
-        self.props
+        self.properties
             .get(key)
             .copied()
             .unwrap_or(0.0)

@@ -18,7 +18,7 @@ pub struct Item {
     pub h: f32,
     pub action: fn(&mut Player) -> Result<(), GameError>,
     pub graphics: StaticGraphics,
-    props: HashMap<String, f32> 
+    properties: HashMap<String, f32> 
 }
 
 impl Item {
@@ -45,7 +45,7 @@ impl Default for Item {
             h: 30.0,
             graphics: StaticGraphics{color: Color::YELLOW, ..Default::default()},
             action: |_p: &mut Player| Ok(()),
-            props: HashMap::new()
+            properties: HashMap::new()
         }
     }
 }
@@ -86,11 +86,11 @@ impl DrawableClass for Item {
 impl Customisable for Item {
 
     fn update_property(&mut self, key: &str, val: f32) {
-        self.props.insert(key.to_string(), val);
+        self.properties.insert(key.to_string(), val);
     }
 
     fn get_property(&self, key: &str) -> f32 {
-        self.props
+        self.properties
             .get(key)
             .copied()
             .unwrap_or(0.0)

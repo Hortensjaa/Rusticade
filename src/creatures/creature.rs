@@ -15,7 +15,7 @@ pub struct Creature {
     pub action: Box<dyn FnMut(&mut Creature, &mut Player) -> Result<bool, GameError> + 'static>,
     pub graphics: CreatureGraphics,
     pub triggered: bool,
-    props: HashMap<String, f32>, 
+    properties: HashMap<String, f32>, 
 }
 
 impl Clone for Creature {
@@ -25,7 +25,7 @@ impl Clone for Creature {
             action: Box::new(|_, _| Ok(true)),
             graphics: self.graphics.clone(),
             triggered: self.triggered,
-            props: self.props.clone(),
+            properties: self.properties.clone(),
         }
     }
 }
@@ -38,7 +38,7 @@ impl Creature {
     ) -> Self {    
         Creature { 
             physics: CreaturePhysics::new(x, y, w, h, moves, speed), 
-            action, props: HashMap::new(),
+            action, properties: HashMap::new(),
             graphics: CreatureGraphics::default(),
             triggered: false
         }
@@ -100,11 +100,11 @@ impl Collidable for Creature {
 impl Customisable for Creature {
 
     fn update_property(&mut self, key: &str, val: f32) {
-        self.props.insert(key.to_string(), val);
+        self.properties.insert(key.to_string(), val);
     }
 
     fn get_property(&self, key: &str) -> f32 {
-        self.props
+        self.properties
             .get(key)
             .copied()
             .unwrap_or(0.0)

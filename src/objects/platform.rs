@@ -14,7 +14,7 @@ pub struct Platform {
     pub finish_line: bool,
     pub actions: HashMap<Direction, Box<dyn FnMut(&mut Platform, &mut Player) -> Result<(), GameError> + 'static>>,
     pub graphics: StaticGraphics,
-    props: HashMap<String, f32>
+    properties: HashMap<String, f32>
 }
 
 impl Clone for Platform {
@@ -28,7 +28,7 @@ impl Clone for Platform {
             finish_line: self.finish_line,
             actions: HashMap::new(),
             graphics: self.graphics.clone(),
-            props: self.props.clone(),
+            properties: self.properties.clone(),
         }
     }
 }
@@ -98,7 +98,7 @@ impl Default for Platform {
             barriers: HashSet::from([Top]),
             graphics: StaticGraphics::default(),
             actions: HashMap::new(),
-            props: HashMap::new()
+            properties: HashMap::new()
         }
     }
 }
@@ -116,11 +116,11 @@ impl Collidable for Platform {
 impl Customisable for Platform {
 
     fn update_property(&mut self, key: &str, val: f32) {
-        self.props.insert(key.to_string(), val);
+        self.properties.insert(key.to_string(), val);
     }
 
     fn get_property(&self, key: &str) -> f32{
-        self.props
+        self.properties
             .get(key)
             .copied()
             .unwrap_or(0.0)

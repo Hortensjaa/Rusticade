@@ -1,58 +1,81 @@
-# Jak to ma działać?
-Silnik zbudowany na bazie biblioteki ggez do tworzenia gier.
-Reprezentuje dużo bardziej wysokopoziomowe podejście do projektowania gier platformowych w 2D poprzez gotowe klasy logiki:
-- [x] Config 
-- [x] Game 
-oraz obiektów na ekranie; każdy obiekt ma swoją: 
-- [x] fizykę (physics) 
-- [x] grafikę (graphics)
-- [x] properties (słownik, który przechowuje wartości liczbowe z kluczami)
-- [x] dodatkowe opcje zależne od typu np. hp gracza, efekty itemu.
+# Rusticade - 2D Platformer Game Engine
 
-Te obiekty to:
-- [x] Player - gracz porusza się zgodnie z prawami fizyki i zasadami kolizji dla określonych obiektów
-- [x] Platform - platformy mogą kolidować z różnych stron i przy uderzeniach z różnych stron mogą wywoływać różne efekty
-- [x] Item - statyczne obiekty, które wykonują jakieś działanie podczas kolizji i pozniej znikaja
-- [x] Creature - stworzenia poruszające się po określonym torze, na które nie działają prawa fizyki (łącznie z kolizjami)
-Oraz domyślną implementację fizyki, która:
-- [x] Zapobiega kolizjom kolizyjnych obiektów
-- [x] Implementuje domyślnie ruchy w obydwie strony z określoną prędkością, skoki, grawitację
+This project is a 2D platformer game engine built using the [ggez](https://ggez.rs/) library. It provides a high-level framework for designing and implementing 2D platformer games with predefined classes for game logic and in-game objects.
 
-### Player
-Gracz, który porusza się na planszy. Posiada: 
-- swoją fizykę, którą można zmieniać (prędkość, wysokość skoku, położenie i wielkość) - physics
-- swoją grafikę, zależną od ustawienia (stanie, skok, skręty) - graphics
-oraz domyślne parametry:
-1. hp - jeśli spadnie do 0, gra się kończy
-2. score - jeśli osiągnie domyślną wartość ustaloną przez użytkownika, gra się kończy (jeśli użytkownik nie zdefiniuje jej w configu, to nic się nie dzieje)
-3. props - inne własności dodane przez użytkownika, np. stamina albo coins.
+## Features
 
-### Obiekty statyczne
-1. Platformy - domyślnie mają barierę tylko z góry (ale można dodać też po bokach i z dołu), mogą mieć akcję
-2. Itemy - nie mają barier, muszą mieć zdefiniowaną akcję w przypadku kolizji, znikają po użyciu.
+### High-Level Game Classes
+- **Config**: A configuration class for defining game-wide settings.
+- **Game**: The core game class that handles game logic and updates.
 
-## Creatures
-1. Potworki poruszają się po torze zdefiniowanym jako listy wektorów (ignorują kolizje i prawa fizyki).
-2. Po kolizji wykonuje się akcja zdefniowana przez użytkownika; jeżeli zwróci 'false', to creature zostaje usunięty z listy ("pokonany").
+### Predefined Object Types
+Each object in the game has the following components:
+- **Physics**: Handles movement, gravity, and collisions.
+- **Graphics**: Represents the object's visual appearance.
+- **Properties**: A customizable dictionary storing numeric values associated with the object.
+- **Additional Options**: Type-dependent features such as player health or item effects.
 
-## Możliwości 
-1. Każdy obiekt (Player, Creature, Item, Platform) posiada mutowalny słownik własności (props), który może być dowolnie dostosowywany przez użytkownika. Daje to możliwość reprezentowania stanu i logiki akcji zależnej od tego stanu.
-2. Domyślnie obiekty reprezentowane są jako kolorowe kwadraty, ale mogą to być też obrazy wprowadzone przez użytkownika.
-3. Tryb latania (flying mode) - bez grawitacji
-4. Dodanie dodatkowej logiki do aktualizacji stanu gry przed i po wywołaniu Game::update()
+#### Object Types
+1. **Player**:
+   - A controllable character that interacts with the environment using physics and collision rules.
+   - Default attributes:
+     - `hp`: Health points. If it drops to 0, the game ends.
+     - `score`: Determines the player's win condition if a target score is set in the `Config`.
+   - Physics and graphics are customizable.
 
-## MVP
-- [x] poruszanie sie gracza w prozni bez fizyki
-- [x] kolizja gracza i platformy
-- [x] fizyka ruchu gracza (uuggghhh)
-- [x] przeniesienie consts jako dostępne dla użytkownika
-- [x] grafiki
-- [x] itemy
-- [x] dodawanie graczowi własnych pól (np. pieniędzy)
-- [x] poprawić fizykę góra-dół
-- [x] dodawanie dodatkowej logiki do pętli zdarzeń (np. score == 100 jako koniec gry)
-- [x] mniej boilerplatu przy tworzeniu gry (przekazywanie configu i kontekstu? żal)
-- [x] grafika - wczytywanie z pliku
-- [x] wyrzucenie timedelty
-- [x] posprzątanie configu (na koniec)
+2. **Platform**:
+   - Static objects with barriers.
+   - Default behavior includes a top-side barrier, with options for side and bottom barriers.
+   - Can trigger custom actions upon collision (different actions for collisions from different directions).
+
+3. **Item**:
+   - Static objects without barriers.
+   - Executes an action upon collision and disappears afterward.
+
+4. **Creature**:
+   - Non-static entities that follow a predefined path (list of vectors).
+   - Ignores physical laws such as gravity and collisions.
+   - Triggers a custom action upon collision. If the action returns `false`, the creature is removed ("defeated").
+
+## Advanced Features
+1. **Customizable Properties**:
+   - Every object type includes a mutable dictionary (`properties`) for storing state; .
+   - Actions can be dependent on state, giving you big freedom in customizing your game experience with less boiler code.
+
+2. **Graphics Customization**:
+   - Default visuals are represented as colored rectangles.
+   - Supports custom images defined by the user.
+   - Remeber to add your resources folder with game_context(res_path).
+
+3. **Flying Mode**:
+   - Disables gravity for player - this feature let you create "horizontal" games like Pacman or Snake.
+
+4. **Extended Game Logic**:
+   - Users can add additional logic to the `Game::update()` method, executed before (Game::action_before) and after (Game::action_after) the main game update loop - it allows you to e.g. automatically move player or platforms, because it has complete control after objects added to your game.
+
+## Example use cases
+- Create a simple platformer where a player collect items and avoids enemies.
+- Make area with different types of platforms (some of them can work like trampolines, doors, teleports or have counters of times you can hit them) - player's goal will be to make it to finish platform; you can add damage effect from falling with huge speed (player.physics.vy)
+- Create 2d labirynth with creatures that patrol specific paths and react to player actions - use flying mode to have "bird's-eye view impression
+- Use Game::action_after and Game::action_before, to automatically move platforms from up to down and generate new ones (like in Icy Tower); you will also need to set bottom of screen as "deadly point" for player.
+
+## Getting Started
+### Prerequisites
+- Rust programming language installed.
+- The `ggez` library added to your project dependencies.
+
+### Installation
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Hortensjaa/Rusticade
+   ```
+2. Build and run the examples:
+   ```bash
+   cargo run --example basic_game
+   ```
+3. Run tests:
+   ```bash
+   cargo test
+   ```
+
 
