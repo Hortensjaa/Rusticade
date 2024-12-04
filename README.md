@@ -21,7 +21,6 @@ Each object in the game has the following components:
    - Default attributes:
      - `hp`: Health points. If it drops to 0, the game ends.
      - `score`: Determines the player's win condition if a target score is set in the `Config`.
-   - Physics and graphics are customizable.
 
 2. **Platform**:
    - Static objects with barriers.
