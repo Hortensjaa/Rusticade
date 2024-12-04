@@ -5,10 +5,11 @@ use crate::shared::config::Config;
 
 pub fn game_context(
     name: &str,
-    author: &str,
-    icon: &str,
-    maximized: bool,
-    config: Arc<Config>
+    author: &str,       
+    res_path: &str,     // custom resource path
+    icon: &str,         // game icon
+    maximized: bool,    // windows in full size
+    config: Arc<Config> // context for game loop
 ) -> GameResult<(ggez::Context, EventLoop<()>)> {
     let window_setup = WindowSetup::default()
         .title(name)
@@ -22,6 +23,7 @@ pub fn game_context(
         .window_setup(window_setup)
         .window_mode(window_mode)
         .add_resource_path("./examples/resources")
+        .add_resource_path(res_path)
         .build()?;
 
     Ok((ctx, event_loop))
@@ -29,14 +31,17 @@ pub fn game_context(
 
 #[macro_export]
 macro_rules! create_game_context {
-    ($name: literal, $author: literal, $icon: literal, $maximized: expr, $config: expr) => {
-        rusticade::game::game_context($name, $author, $icon, $maximized, $config)
+    ($name: literal, $author: literal, $res_path: literal, $icon: literal, $maximized: expr, $config: expr) => {
+        rusticade::game::game_context($name, $author, $res_path, $icon, $maximized, $config)
     };
-    ($name: literal, $author: literal, $icon: literal, $config: expr) => {
-        rusticade::game::game_context($name, $author, $icon, false, $config)
+    ($name: literal, $author: literal, $res_path: literal, $icon: literal, $config: expr) => {
+        rusticade::game::game_context($name, $author, $res_path, $icon, false, $config)
+    };
+    ($name: literal, $author: literal, $res_path: literal, $config: expr) => {
+        rusticade::game::context::game_context($name, $author, $res_path, "", false, $config)
     };
     ($name: literal, $author: literal, $config: expr) => {
-        rusticade::game::context::game_context($name, $author, "", false, $config)
+        rusticade::game::context::game_context($name, $author, "", "", false, $config)
     };
 }
 

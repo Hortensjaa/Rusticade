@@ -27,12 +27,26 @@ impl Game {
     }
 
     fn handle_player_input(&mut self, input: KeyCode) -> GameResult {
-        match input {
-            KeyCode::Up | KeyCode::W => self.player.jump(),
-            KeyCode::Left | KeyCode::A => self.player.move_left(),
-            KeyCode::Right | KeyCode::D => self.player.move_right(),
-            KeyCode::Down | KeyCode::S => self.player.move_down(),
-            _ => Ok(()),
+        if self.config.awsd {
+            match input {
+                KeyCode::W => self.player.jump()?,
+                KeyCode::A => self.player.move_left()?,
+                KeyCode::D => self.player.move_right()?,
+                KeyCode::S => self.player.move_down()?,
+                _ => (),
+            }
+        }
+        if self.config.arrows {
+            match input {
+                KeyCode::Up => self.player.jump(),
+                KeyCode::Left => self.player.move_left(),
+                KeyCode::Right => self.player.move_right(),
+                KeyCode::Down => self.player.move_down(),
+                _ => Ok(())
+            }
+        }
+        else {
+            Ok(())
         }
     }
 
@@ -116,13 +130,24 @@ impl EventHandler for Game {
 
     fn key_up_event(&mut self, _ctx: &mut Context, input: KeyInput) -> GameResult {
         if let Some(key) = input.keycode {
-            match key {
-                KeyCode::Left | KeyCode::A | KeyCode::Right | KeyCode::D => self.player.stop()?,
-                KeyCode::S | KeyCode::Down | KeyCode::W | KeyCode::Up => if self.config.flying_mode {
-                    self.player.stop()?
-                }
-                _ => (),
-            };
+            if self.config.awsd {
+                match key {
+                    KeyCode::A | KeyCode::D => self.player.stop()?,
+                    KeyCode::S | KeyCode::W => if self.config.flying_mode {
+                        self.player.stop()?
+                    }
+                    _ => (),
+                };
+            }
+            if self.config.arrows {
+                match key {
+                    KeyCode::Left |KeyCode::Right => self.player.stop()?,
+                    KeyCode::Down |  KeyCode::Up => if self.config.flying_mode {
+                        self.player.stop()?
+                    }
+                    _ => (),
+                };
+            }
         }
         Ok(())
     }

@@ -1,5 +1,6 @@
 use core::f32;
 
+// configuration structure for game, player and all objects included
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Config {
     // screen size
@@ -19,11 +20,6 @@ pub struct Config {
     // manipulation options
     pub awsd: bool,
     pub arrows: bool,
-    pub mouse: bool,
-
-    // camera options (fixed means always focusing on player)
-    pub fixed_x: bool,
-    pub fixed_y: bool,
 }
 
 impl Default for Config {
@@ -37,11 +33,8 @@ impl Default for Config {
             flying_mode: false,
             delta_time: 1.0 / 40.0,
             max_score: f32::MAX,
-            fixed_x: false,
-            fixed_y: false,
-            awsd: true,
+            awsd: false,
             arrows: true,
-            mouse: false,
         }
     }
 }
