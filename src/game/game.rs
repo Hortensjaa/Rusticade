@@ -2,13 +2,14 @@ use std::sync::Arc;
 
 use ggez::event::EventHandler;
 use ggez::input::keyboard::{KeyCode, KeyInput};
-use ggez::graphics::{Canvas, Color};
-use ggez::{Context, GameResult};
+use ggez::graphics::{self, Canvas, Color};
+use ggez::{Context, GameError, GameResult};
 
 use crate::creatures::creature::Creature;
 use crate::objects::{platform::Platform, item::Item};
 use crate::player::player::Player;
 use crate::shared::config::Config;
+use crate::shared::drawable::DrawableClass;
 
 pub struct Game {
     pub player: Player,
@@ -58,11 +59,22 @@ impl Game {
         }
         Ok(())
     }
+
+    fn draw_object(ctx: &mut Context, canvas: &mut graphics::Canvas, drawable_obj: &mut impl DrawableClass) -> GameResult {
+        match drawable_obj.draw(ctx) {
+            Ok((img, draw_param)) => {
+                canvas.draw(&img, draw_param);
+            }
+            _ => {
+                return Err(GameError::GraphicsInitializationError)
+            }
+        }
+        Ok(())
+    }    
 }
 
 impl EventHandler for Game {
     
-
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
         self.run_action_before()?;
         self.update_player()?;
@@ -82,11 +94,16 @@ impl EventHandler for Game {
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = Canvas::from_frame(ctx, Color::BLACK);
 
-        self.draw_player(ctx, &mut canvas)?;
-        self.draw_platforms(ctx, &mut canvas)?;
-        self.draw_items(ctx, &mut canvas)?;
-        self.draw_creatures(ctx, &mut canvas)?;
-
+        Game::draw_object(ctx, &mut canvas, &mut self.player)?;
+        for p in &mut self.platforms {
+            Game::draw_object(ctx, &mut canvas, p)?;
+        }
+        for p in &mut self.items {
+            Game::draw_object(ctx, &mut canvas, p)?;
+        }
+        for p in &mut self.creatures {
+            Game::draw_object(ctx, &mut canvas, p)?;
+        }
         canvas.finish(ctx)
     }
 

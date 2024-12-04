@@ -6,7 +6,7 @@ Reprezentuje dużo bardziej wysokopoziomowe podejście do projektowania gier pla
 oraz obiektów na ekranie; każdy obiekt ma swoją: 
 - [x] fizykę (physics) 
 - [x] grafikę (graphics)
-- [ ] properties (słownik, który przechowuje wartości liczbowe z kluczami)
+- [x] properties (słownik, który przechowuje wartości liczbowe z kluczami)
 - [x] dodatkowe opcje zależne od typu np. hp gracza, efekty itemu.
 
 Te obiekty to:
@@ -35,16 +35,11 @@ oraz domyślne parametry:
 1. Potworki poruszają się po torze zdefiniowanym jako listy wektorów (ignorują kolizje i prawa fizyki).
 2. Po kolizji wykonuje się akcja zdefniowana przez użytkownika; jeżeli zwróci 'false', to creature zostaje usunięty z listy ("pokonany").
 
-
 ## Możliwości 
 1. Każdy obiekt (Player, Creature, Item, Platform) posiada mutowalny słownik własności (props), który może być dowolnie dostosowywany przez użytkownika. Daje to możliwość reprezentowania stanu i logiki akcji zależnej od tego stanu.
 2. Domyślnie obiekty reprezentowane są jako kolorowe kwadraty, ale mogą to być też obrazy wprowadzone przez użytkownika.
 3. Tryb latania (flying mode) - bez grawitacji
 4. Dodanie dodatkowej logiki do aktualizacji stanu gry przed i po wywołaniu Game::update()
-
-## Przykłady
-1. Spychające stworki - zbierz wszystkie monety
-2. Labirynt - bez grawitacji, jeśli jakiś zwierzak cię dotknie - przegrywasz
 
 ## MVP
 - [x] poruszanie sie gracza w prozni bez fizyki
@@ -56,8 +51,8 @@ oraz domyślne parametry:
 - [x] dodawanie graczowi własnych pól (np. pieniędzy)
 - [x] poprawić fizykę góra-dół
 - [x] dodawanie dodatkowej logiki do pętli zdarzeń (np. score == 100 jako koniec gry)
-- [ ] mniej boilerplatu przy tworzeniu gry (przekazywanie configu i kontekstu? żal)
-- [ ] grafika - wczytywanie z pliku
+- [x] mniej boilerplatu przy tworzeniu gry (przekazywanie configu i kontekstu? żal)
+- [x] grafika - wczytywanie z pliku
 - [x] wyrzucenie timedelty
-- [ ] posprzątanie configu (na koniec)
+- [x] posprzątanie configu (na koniec)
 

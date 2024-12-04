@@ -21,6 +21,7 @@ pub fn game_context(
     let (ctx, event_loop) = ContextBuilder::new(name, author)
         .window_setup(window_setup)
         .window_mode(window_mode)
+        .add_resource_path("./examples/resources")
         .build()?;
 
     Ok((ctx, event_loop))

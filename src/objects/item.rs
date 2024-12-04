@@ -76,6 +76,10 @@ impl DrawableClass for Item {
     fn get_size(&self) -> (f32, f32) {
         (self.w, self.h)
     }
+
+    fn set_image(&mut self, img: Image) {
+        self.graphics.basic = Some(img)
+    }
 }
 
 

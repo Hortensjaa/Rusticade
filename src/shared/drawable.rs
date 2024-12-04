@@ -1,13 +1,14 @@
-use ggez::{graphics::{self, Color, DrawMode, DrawParam, Image, Mesh}, Context, GameError};
+use ggez::{graphics::{Color, DrawParam, Image}, Context, GameError};
 
 
 pub trait DrawableClass {
     fn get_position(&self) -> (f32, f32); 
     fn get_size(&self) -> (f32, f32); 
     fn get_image(&self) -> Option<Image>;
+    fn set_image(&mut self, _: Image);
     fn get_color(&self) -> Color;
 
-    fn draw(&self) -> Result<(Image, DrawParam), GameError> {
+    fn draw(&self, ctx: &mut Context,) -> Result<(Image, DrawParam), GameError> {
         let (x, y) = self.get_position();
         let (w, h) = self.get_size();
 
@@ -20,34 +21,16 @@ pub trait DrawableClass {
                     .scale([scale_x, scale_y]); 
                 Ok((img, draw_param))
             }
-            None => Err(GameError::CustomError("Can't find".to_string()))
+            None => {
+                let draw_param = DrawParam::default().dest([x, y]);
+                Ok((Image::from_color(ctx, w as u32, h as u32, Some(self.get_color())), draw_param))
+            }
         }
     }
 
-    fn draw_rectangle(&self, ctx: &mut Context) -> Result<Mesh, GameError> {
-        let (x, y) = self.get_position();
-        let (w, h) = self.get_size();
-
-        Mesh::new_rectangle(
-            ctx,
-            DrawMode::fill(),
-            graphics::Rect::new(x, y, w, h),
-            self.get_color(),
-        )
-    }
-
-    fn draw_ellipse(&self, ctx: &mut Context) -> Result<Mesh, GameError> {
-        let (x, y) = self.get_position();
-        let (w, h) = self.get_size();
-
-        Mesh::new_ellipse(
-            ctx,
-            DrawMode::fill(),
-            [x, y],
-            w,
-            h, 
-            0.1,
-            self.get_color(),
-        )
+    fn load_image_from_file(&mut self, ctx: &mut Context, image_path: &str) -> Result<(), GameError> {
+        let image = Image::from_path(ctx, image_path)?;
+        self.set_image(image);
+        Ok(())
     }
 }

@@ -62,12 +62,15 @@ impl Platform {
             Ok(())
         }
     }
-    
 }
 
 impl DrawableClass for Platform {
     fn get_image(&self) -> Option<Image> {
         self.graphics.basic.clone()
+    }
+
+    fn set_image(&mut self, img: Image) {
+        self.graphics.basic = Some(img)
     }
 
     fn get_color(&self) -> Color {

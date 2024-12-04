@@ -35,4 +35,8 @@ impl DrawableClass for Creature {
     fn get_size(&self) -> (f32, f32) {
         (self.physics.w, self.physics.h)
     }
+
+    fn set_image(&mut self, img: Image) {
+        self.graphics.basic = Some(img)
+    }
 }

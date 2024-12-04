@@ -2,6 +2,7 @@ use std::sync::Arc;
 use ggez::{event, GameResult};
 
 use rusticade::shared::customisable::Customisable;
+use rusticade::shared::drawable::DrawableClass;
 use rusticade::{create_game_context, create_creature, create_player};
 use rusticade::creatures::creature::Creature;
 use rusticade::objects::{item::Item, platform::Platform};
@@ -19,13 +20,19 @@ pub fn main() -> GameResult {
 
     // configuration
     let config = Arc::new(Config::default());
-    let (ctx, event_loop) = create_game_context!("Moja gra", "Julia Kulczycka", config.clone())?;
+    let (mut ctx, event_loop) = create_game_context!("Animations and physics", "Julia Kulczycka", config.clone())?;
 
     // creating player
     let mut player = create_player!(200.0, config.screen_height - 50.0, config.clone());
     // modifying player
     player.physics.speed = 5.0;
     player.physics.jump = 12.0;
+    if let Err(e) = player.load_image_from_file(&mut ctx, "/nyan.png") {
+        println!("{}", e);
+        return Err(e);
+    } else {
+        println!("Image selected");
+    }
 
 
     // generationg platforms
@@ -40,7 +47,7 @@ pub fn main() -> GameResult {
     counter_platform.set_action(Top, Box::new(|p: &mut Platform, _: &mut Player| {
         let c = p.get_property("counter");
         p.update_property("counter", c + 1.0);
-        print!("Counter set to {}", c + 1.0);
+        println!("Counter set to {}", c + 1.0);
         Ok(())
     }));
 
