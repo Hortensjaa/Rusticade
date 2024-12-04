@@ -26,18 +26,17 @@ pub fn game_context(
     Ok((ctx, event_loop))
 }
 
+#[macro_export]
 macro_rules! create_game_context {
     ($name: literal, $author: literal, $icon: literal, $maximized: expr, $config: expr) => {
-        crate::game::context::game_context($name, $author, $icon, $maximized, $config)
+        rusticade::game::game_context($name, $author, $icon, $maximized, $config)
     };
     ($name: literal, $author: literal, $icon: literal, $config: expr) => {
-        crate::game::context::game_context($name, $author, $icon, false, $config)
+        rusticade::game::game_context($name, $author, $icon, false, $config)
     };
     ($name: literal, $author: literal, $config: expr) => {
-        crate::game::context::game_context($name, $author, "", false, $config)
+        rusticade::game::context::game_context($name, $author, "", false, $config)
     };
 }
 
-#[allow(unused_imports)]
-pub(crate) use create_game_context;
 

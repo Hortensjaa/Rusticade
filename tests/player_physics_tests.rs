@@ -21,9 +21,7 @@ mod test {
         let _ = player.move_right();
         assert_eq!(player.physics.vx, player.physics.speed);
 
-        let mut items = vec![];
-        let mut creatures = vec![];
-        let _ = player.update(&[], &mut items, &mut creatures);
+        let _ = player.update(&mut vec![], &mut vec![], &mut vec![]);
         assert_eq!(player.physics.x, 100.0 + player.physics.speed);
     }
 
@@ -35,9 +33,7 @@ mod test {
         let _ = player.move_left();
         assert_eq!(player.physics.vx, -player.physics.speed);
 
-        let mut items = vec![];
-        let mut creatures = vec![];
-        let _ = player.update(&[], &mut items, &mut creatures);
+        let _ = player.update(&mut vec![], &mut vec![],  &mut vec![]);
         assert_eq!(player.physics.x, 100.0 - player.physics.speed);
     }
 
@@ -47,12 +43,10 @@ mod test {
         player.physics.x = 100.0;
         player.physics.speed = 100.0;
         let _ = player.move_right();
-        let mut items = vec![];
-        let mut creatures = vec![];
-        let _ = player.update(&[], &mut items, &mut creatures);
+        let _ = player.update(&mut vec![], &mut vec![], &mut vec![]);
 
         let _ = player.stop();
-        let _ = player.update(&[], &mut items, &mut creatures);
+        let _ = player.update(&mut vec![], &mut vec![], &mut vec![]);
 
         assert_eq!(player.physics.vx, 0.0);
         assert_eq!(player.physics.x, 100.0 + player.physics.speed); // No change after stop
@@ -78,14 +72,15 @@ mod test {
         platform.y = 200.0;
         player.physics.x = 0.0;
         player.physics.y = 100.0; // Start above the platform
+        let mut platforms = vec![platform];
         let mut items = vec![];
         let mut creatures = vec![];
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
+            let _ = player.update(&mut platforms, &mut items, &mut creatures);
         }
         
-        assert!(player.physics.y - (platform.y - platform.h) <= 0.1); // Player should land on top of platform
-        assert_eq!(player.physics.on_ground, true); // Player should be marked as on ground
+        assert!(player.physics.y - (platforms[0].y - platforms[0].h) <= 0.1);
+        assert_eq!(player.physics.on_ground, true); 
     }
 
     // Test gravity effect
@@ -93,9 +88,7 @@ mod test {
     fn test_gravity_effect() {
         let mut player = create_default_player();
         player.physics.vy = 0.0; // Initial vertical speed
-        let mut items = vec![];
-        let mut creatures = vec![];
-        let _ = player.update(&[], &mut items, &mut creatures);
+        let _ = player.update(&mut vec![], &mut vec![], &mut vec![]);
 
         // After update, vy should increase due to gravity (assuming gravity is negative)
         assert!(player.physics.vy > 0.0);
@@ -107,10 +100,7 @@ mod test {
         let mut player = create_default_player();
         player.physics.x = 1000.0; // Move player outside the screen to the right
         player.physics.y = 1000.0; // Move player outside the screen to the bottom
-
-        let mut items = vec![];
-        let mut creatures = vec![];
-        let _ = player.update(&[], &mut items, &mut creatures);
+        let _ = player.update(&mut vec![], &mut vec![], &mut vec![]);
 
         assert_eq!(player.physics.x, player.get_config().screen_width - player.physics.w); // Player should be clamped to the right edge
         assert_eq!(player.physics.y, player.get_config().screen_height - player.physics.h); // Player should be clamped to the bottom edge

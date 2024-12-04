@@ -27,9 +27,9 @@ impl Game {
 
     pub fn add_finish_platform(&mut self, x: f32, y: f32, w: f32, h: f32) {
         let mut platform = Platform::new(x, y, w, h);
-        platform.set_action(Direction::Top, |_p: &mut Player| {
-            Err(GameError::CustomError(String::from("Finish platform action")))
-        });
+        platform.set_action(Direction::Top, Box::new(|_a: &mut Platform, _b: &mut Player| {
+            Err(GameError::CustomError(String::from("Win! You made it to finish line")))
+        }));
         self.platforms.push(platform);
     }
 

@@ -81,15 +81,14 @@ impl DrawableClass for Item {
 
 impl Customisable for Item {
 
-    fn update_property(&mut self, key: &str, val: f32) -> Result<(), GameError> {
+    fn update_property(&mut self, key: &str, val: f32) {
         self.props.insert(key.to_string(), val);
-        Ok(())
     }
 
-    fn get_property(&self, key: &str) -> Result<f32, GameError> {
+    fn get_property(&self, key: &str) -> f32 {
         self.props
             .get(key)
-            .copied() 
-            .ok_or_else(|| GameError::CustomError(format!("Property '{}' not found", key)))
+            .copied()
+            .unwrap_or(0.0)
     }
 }

@@ -8,7 +8,7 @@ mod tests {
     use rusticade::shared::collidable::Collidable;
     use rusticade::shared::config::Config;
 
-    fn dummy_action(player: &mut Player) -> Result<bool, GameError> {
+    fn dummy_action(_: &mut Creature, player: &mut Player) -> Result<bool, GameError> {
         player.hp -= 10.0;
         Ok(true)
     }
@@ -24,37 +24,37 @@ mod tests {
             50.0,
             vec![],
             0.0,
-            dummy_action,
+            Box::new(dummy_action),
         );
 
-        let mut creatures = vec![creature.clone()];
+        let mut creatures = vec![creature];
 
         // before collison
         assert_eq!(player.hp, 100.0);
-        assert!(!creature.triggered);
+        assert!(!creatures[0].triggered);
 
         // first collision
         let _ = player.move_right();
-        let _ = player.update(&[], &mut vec![], &mut creatures);
-        assert!(player.is_colliding_with(&creature));
+        let _ = player.update(&mut vec![], &mut vec![], &mut creatures);
+        assert!(player.is_colliding_with(&creatures[0]));
         assert_eq!(player.hp, 90.0); 
 
         // next update - no action
-        let _ = player.update(&[], &mut vec![], &mut creatures);
-        assert!(player.is_colliding_with(&creature));
-        assert_eq!(player.hp, 90.0); // HP bez zmian
+        let _ = player.update(&mut vec![], &mut vec![], &mut creatures);
+        assert!(player.is_colliding_with(&creatures[0]));
+        assert_eq!(player.hp, 90.0); 
 
         // go out of collision
         let _ = player.move_left();
-        let _ = player.update(&[], &mut vec![], &mut creatures);
+        let _ = player.update(&mut vec![], &mut vec![], &mut creatures);
         let _ = player.move_left();
-        let _ = player.update(&[], &mut vec![], &mut creatures);
-        assert!(!player.is_colliding_with(&creature));
+        let _ = player.update(&mut vec![], &mut vec![], &mut creatures);
+        assert!(!player.is_colliding_with(&creatures[0]));
 
         // going back to collision
         let _ = player.move_right();
-        let _ = player.update(&[], &mut vec![], &mut creatures);
-        assert!(player.is_colliding_with(&creature));
+        let _ = player.update(&mut vec![], &mut vec![], &mut creatures);
+        assert!(player.is_colliding_with(&creatures[0]));
         assert_eq!(player.hp, 80.0); // action done again
     }
 

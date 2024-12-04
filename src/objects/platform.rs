@@ -5,7 +5,6 @@ use crate::{player::player::Player, shared::{collidable::Collidable, customisabl
 use super::object_graphics::StaticGraphics;
 
 
-#[derive(Clone, Debug)]
 pub struct Platform {
     pub x: f32,
     pub y: f32,
@@ -13,10 +12,28 @@ pub struct Platform {
     pub h: f32,
     pub barriers: HashSet<Direction>,
     pub finish_line: bool,
-    pub actions: HashMap<Direction, fn(&mut Player) -> Result<(), GameError>>,
+    pub actions: HashMap<Direction, Box<dyn FnMut(&mut Platform, &mut Player) -> Result<(), GameError> + 'static>>,
     pub graphics: StaticGraphics,
-    props: HashMap<String, f32> 
+    props: HashMap<String, f32>
 }
+
+impl Clone for Platform {
+    fn clone(&self) -> Self {
+        Platform {
+            x: self.x,
+            y: self.y,
+            w: self.w,
+            h: self.h,
+            barriers: self.barriers.clone(),
+            finish_line: self.finish_line,
+            actions: HashMap::new(),
+            graphics: self.graphics.clone(),
+            props: self.props.clone(),
+        }
+    }
+}
+
+
 
 
 impl Platform {
@@ -32,18 +49,20 @@ impl Platform {
         }
     }
 
-    pub fn set_action(&mut self, direction: Direction, action: fn(&mut Player) -> Result<(), GameError>) {
+    pub fn set_action(&mut self, direction: Direction, action: Box<dyn FnMut(&mut Platform, &mut Player) -> Result<(), GameError> + 'static>) {
         self.actions.insert(direction, action);
     }
 
-    pub fn do_action(&self, direction: &Direction, player: &mut Player) -> Result<(), GameError> {
-        let a = self.actions.get(direction);
-        match a {
-            Some(action) => action(player),
-            None => Ok(())
+    pub fn do_action(&mut self, direction: &Direction, player: &mut Player) -> Result<(), GameError> {
+        if let Some(mut action) = self.actions.remove(direction) {
+            let result = action(self, player);
+            self.actions.insert(direction.clone(), action);
+            result
+        } else {
+            Ok(())
         }
-        
     }
+    
 }
 
 impl DrawableClass for Platform {
@@ -93,15 +112,14 @@ impl Collidable for Platform {
 
 impl Customisable for Platform {
 
-    fn update_property(&mut self, key: &str, val: f32) -> Result<(), GameError> {
+    fn update_property(&mut self, key: &str, val: f32) {
         self.props.insert(key.to_string(), val);
-        Ok(())
     }
 
-    fn get_property(&self, key: &str) -> Result<f32, GameError> {
+    fn get_property(&self, key: &str) -> f32{
         self.props
             .get(key)
-            .copied() 
-            .ok_or_else(|| GameError::CustomError(format!("Property '{}' not found", key)))
+            .copied()
+            .unwrap_or(0.0)
     }
 }

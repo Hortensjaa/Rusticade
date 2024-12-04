@@ -10,20 +10,31 @@ use super::creature_graphics::CreatureGraphics;
 use super::creature_physics::CreaturePhysics;
 
 
-#[derive(Clone, Debug)]
 pub struct Creature {
     pub physics: CreaturePhysics,
-    pub action: fn(&mut Player) -> Result<bool, GameError>,
+    pub action: Box<dyn FnMut(&mut Creature, &mut Player) -> Result<bool, GameError> + 'static>,
     pub graphics: CreatureGraphics,
     pub triggered: bool,
     props: HashMap<String, f32>, 
+}
+
+impl Clone for Creature {
+    fn clone(&self) -> Self {
+        Creature {
+            physics: self.physics.clone(),
+            action: Box::new(|_, _| Ok(true)),
+            graphics: self.graphics.clone(),
+            triggered: self.triggered,
+            props: self.props.clone(),
+        }
+    }
 }
 
 impl Creature {
     pub fn new(
         x: f32, y: f32, w: f32, h: f32,
         moves: Vec<(f32, f32)>, speed: f32,
-        action: fn(&mut Player) -> Result<bool, GameError>
+        action: Box<dyn FnMut(&mut Creature, &mut Player) -> Result<bool, GameError> + 'static>
     ) -> Self {    
         Creature { 
             physics: CreaturePhysics::new(x, y, w, h, moves, speed), 
@@ -62,11 +73,15 @@ impl Creature {
         
     }
 
-    pub fn do_action(&self, player: &mut Player) -> Result<bool, GameError> {
-        match self.triggered {
-            true => Ok(true),
-            false => (self.action)(player) 
-        }         
+    pub fn do_action(&mut self, player: &mut Player) -> Result<bool, GameError> {
+        let mut action = std::mem::replace(&mut self.action, Box::new(|_, _| Ok(false)));
+        let result = if self.triggered {
+            Ok(true)
+        } else {
+            action(self, player)
+        };
+        self.action = action;
+        result
     }
 }
 
@@ -84,15 +99,14 @@ impl Collidable for Creature {
 
 impl Customisable for Creature {
 
-    fn update_property(&mut self, key: &str, val: f32) -> Result<(), GameError> {
+    fn update_property(&mut self, key: &str, val: f32) {
         self.props.insert(key.to_string(), val);
-        Ok(())
     }
 
-    fn get_property(&self, key: &str) -> Result<f32, GameError> {
+    fn get_property(&self, key: &str) -> f32 {
         self.props
             .get(key)
-            .copied() 
-            .ok_or_else(|| GameError::CustomError(format!("Property '{}' not found", key)))
+            .copied()
+            .unwrap_or(0.0)
     }
 }

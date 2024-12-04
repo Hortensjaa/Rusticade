@@ -55,7 +55,7 @@ oraz domyślne parametry:
 - [x] itemy
 - [x] dodawanie graczowi własnych pól (np. pieniędzy)
 - [x] poprawić fizykę góra-dół
-- [ ] dodawanie dodatkowej logiki do pętli zdarzeń (np. score == 100 jako koniec gry)
+- [x] dodawanie dodatkowej logiki do pętli zdarzeń (np. score == 100 jako koniec gry)
 - [ ] mniej boilerplatu przy tworzeniu gry (przekazywanie configu i kontekstu? żal)
 - [ ] grafika - wczytywanie z pliku
 - [x] wyrzucenie timedelty

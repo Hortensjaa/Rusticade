@@ -40,12 +40,12 @@ impl Game {
     }
 
     fn update_player(&mut self) -> GameResult<()> {
-        self.player.update(&self.platforms, &mut self.items, &mut self.creatures)
+        self.player.update(&mut self.platforms, &mut self.items, &mut self.creatures)
     }
 
     fn run_action_before(&mut self) -> GameResult<()> {
         if let Some(mut action) = self.action_before.take() {
-            action(self)?; // Wywołanie akcji po
+            action(self)?; 
             self.action_after = Some(action);
         }
         Ok(())
@@ -53,7 +53,7 @@ impl Game {
 
     fn run_action_after(&mut self) -> GameResult<()> {
         if let Some(mut action) = self.action_after.take() {
-            action(self)?; // Wywołanie akcji po
+            action(self)?; 
             self.action_after = Some(action);
         }
         Ok(())

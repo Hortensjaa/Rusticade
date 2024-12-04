@@ -4,6 +4,14 @@ mod tests {
     use rusticade::shared::directions::Direction::*;
     use rusticade::player::player::Player;
 
+    fn add_score_action() -> Box<dyn FnMut(&mut Platform, &mut Player) -> Result<(), ggez::error::GameError> + 'static> {
+        Box::new(|_platform: &mut Platform, player: &mut Player| {
+            player.score += 10.0;
+            Ok(())
+        })
+    }
+
+
     #[test]
     fn test_platform_action_top() {
         let mut player = Player::default();
@@ -11,16 +19,11 @@ mod tests {
         let mut platform = Platform::default();
         platform.x = 0.0;
         platform.y = 200.0;
+        platform.set_action(Top, add_score_action());
+        let mut platforms = vec![platform];
         
-        platform.set_action(Top, |player| {
-            player.score += 10.0;
-            Ok(())
-        });
-
-        let mut items = vec![];
-        let mut creatures = vec![];
         while !player.physics.on_ground {
-            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
+            let _ = player.update(&mut platforms, &mut vec![], &mut vec![]);
         }
         
         assert_eq!(player.score, 10.0); 
@@ -35,22 +38,16 @@ mod tests {
         player.physics.x = 0.0; 
         player.physics.y = player.get_config().screen_height;
         player.physics.vx = 5.0; 
-        player.score = 10.0;
 
-        platform.set_action(Left, |player| {
-            player.score *= 2.0;
-            Ok(())
-        });
-
+        platform.set_action(Left, add_score_action());
         platform.barriers.insert(Left); 
-        let mut items = vec![];
-        let mut creatures = vec![];
+        let mut platforms = vec![platform];
 
         while player.physics.vx > 0.0 {
-            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
+            let _ = player.update(&mut platforms, &mut vec![], &mut vec![]);
         }
 
-        assert_eq!(player.score, 20.0);
+        assert_eq!(player.score, 10.0);
     }
 
     #[test]
@@ -62,23 +59,18 @@ mod tests {
         player.physics.x = 200.0; 
         player.physics.y = player.get_config().screen_height;
         player.physics.vx = -5.0; 
-        player.score = 10.0;
 
         platform.barriers.insert(Right);
 
-        platform.set_action(Right, |player| {
-            player.score *= 2.0;
-            Ok(())
-        });
-
-        let mut items = vec![]; 
-        let mut creatures = vec![];
+        platform.set_action(Right, add_score_action());
+        platform.barriers.insert(Right); 
+        let mut platforms = vec![platform];
 
         while player.physics.vx < 0.0 {
-            let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
+            let _ = player.update(&mut platforms, &mut vec![], &mut vec![]);
         }
 
-        assert_eq!(player.score, 20.0);
+        assert_eq!(player.score, 10.0);
     }
 
     #[test]
@@ -89,15 +81,14 @@ mod tests {
         platform.x = 1000.0; 
         platform.y = 1000.0;
 
-        platform.set_action(Top, |player| {
-            player.score += 100.0;
-            Ok(())
-        });
+        platform.set_action(Right, add_score_action());
+        platform.barriers.insert(Right); 
+        let mut platforms = vec![platform];
 
-        let mut items = vec![];
-        let mut creatures = vec![];
-        let _ = player.update(&[platform.clone()], &mut items, &mut creatures);
+        while player.physics.vx < 0.0 {
+            let _ = player.update(&mut platforms, &mut vec![], &mut vec![]);
+        }
 
-        assert_eq!(player.score, 0.0); 
+        assert_eq!(player.score, 0.0);
     }
 }

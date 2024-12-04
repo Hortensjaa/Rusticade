@@ -6,7 +6,7 @@ mod tests {
 
         let mut creature = Creature::new(
             0.0, 0.0, 10.0, 10.0,
-            vec, 50.0, |_| Ok(true),
+            vec, 50.0, Box::new(|_, _| Ok(true)),
         );
 
         for _ in 0..steps {

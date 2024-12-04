@@ -6,7 +6,7 @@ use crate::creatures::creature::Creature;
 use super::player::Player;
 
 impl Player {
-    pub fn update(&mut self, platforms: &[Platform], items: &mut Vec<Item>, creatures: &mut Vec<Creature>) -> Result<(), GameError> {
+    pub fn update(&mut self, platforms: &mut Vec<Platform>, items: &mut Vec<Item>, creatures: &mut Vec<Creature>) -> Result<(), GameError> {
         self.check_finish_conditions()?;
         self.apply_gravity();
         self.update_position();
@@ -18,8 +18,11 @@ impl Player {
     }
     
     fn check_finish_conditions(&self) -> Result<(), GameError> {
-        if self.hp <= 0.0 || self.score > self.get_config().max_score {
-            return Err(GameError::CustomError(String::from("Finish condition")));
+        if self.hp <= 0.0 {
+            return Err(GameError::CustomError(String::from("Oh, you lost all your hp - try again")));
+        }
+        if self.score > self.get_config().max_score {
+            return Err(GameError::CustomError(format!("Win! You score {} points", self.score)));
         }
         Ok(())
     }
@@ -36,7 +39,7 @@ impl Player {
         self.physics.on_ground = false;
     }
     
-    fn handle_platform_collisions(&mut self, platforms: &[Platform]) -> Result<(), GameError> {
+    fn handle_platform_collisions(&mut self, platforms: &mut Vec<Platform>) -> Result<(), GameError> {
         for platform in platforms {
             if self.is_on_top_of(platform, self.physics.vy.abs()) {
                 self.resolve_top_collision(platform)?;
@@ -58,7 +61,7 @@ impl Player {
         Ok(())
     }
     
-    fn resolve_top_collision(&mut self, platform: &Platform) -> Result<(), GameError> {
+    fn resolve_top_collision(&mut self, platform: &mut Platform) -> Result<(), GameError> {
         if platform.barriers.contains(&Top) {
             self.physics.y = platform.y - self.physics.h - 0.1;
             self.physics.vy = self.physics.vy.min(0.0);
@@ -68,7 +71,7 @@ impl Player {
         Ok(())
     }
     
-    fn resolve_bottom_collision(&mut self, platform: &Platform) -> Result<(), GameError> {
+    fn resolve_bottom_collision(&mut self, platform: &mut Platform) -> Result<(), GameError> {
         if platform.barriers.contains(&Bottom) {
             self.physics.y = platform.y + platform.h + 0.1;
             self.physics.vy = self.physics.vy.max(0.0);
@@ -77,7 +80,7 @@ impl Player {
         Ok(())
     }
     
-    fn resolve_left_collision(&mut self, platform: &Platform) -> Result<(), GameError> {
+    fn resolve_left_collision(&mut self, platform: &mut Platform) -> Result<(), GameError> {
         if platform.barriers.contains(&Left) {
             self.physics.x = platform.x - self.physics.w - 0.1;
             self.physics.vx = 0.0;
@@ -86,7 +89,7 @@ impl Player {
         Ok(())
     }
     
-    fn resolve_right_collision(&mut self, platform: &Platform) -> Result<(), GameError> {
+    fn resolve_right_collision(&mut self, platform: &mut Platform) -> Result<(), GameError> {
         if platform.barriers.contains(&Right) {
             self.physics.x = platform.x + platform.w + 0.1;
             self.physics.vx = 0.0;
