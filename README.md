@@ -39,25 +39,25 @@ Each object in the game has the following components:
 
 ## Advanced Features
 1. **Customizable Properties**:
-   - Every object type includes a mutable dictionary (`properties`) for storing state; .
-   - Actions can be dependent on state, giving you big freedom in customizing your game experience with less boiler code.
+   - Every object type includes a mutable dictionary (`properties`) for storing state (as pairs `string : f32`);
+   - Actions can be dependent on state, giving you big freedom in customizing your game experience with less boilerplate code.
 
 2. **Graphics Customization**:
    - Default visuals are represented as colored rectangles.
    - Supports custom images defined by the user.
-   - Remeber to add your resources folder with game_context(res_path).
+   - Remeber to add your resources folder with `game_context(res_path)`.
 
 3. **Flying Mode**:
-   - Disables gravity for player - this feature let you create "horizontal" games like Pacman or Snake.
+   - Disables `gravity` for player - this feature let you create "horizontal" games like Pacman or Snake, because movement along the Y axis will be the same as for X axis.
 
 4. **Extended Game Logic**:
-   - Users can add additional logic to the `Game::update()` method, executed before (Game::action_before) and after (Game::action_after) the main game update loop - it allows you to e.g. automatically move player or platforms, because it has complete control after objects added to your game.
+   - Users can add additional logic to the `Game::update()` method, executed before (`Game::action_before`) and after (`Game::action_after`) the main game update loop - it allows you to e.g. automatically move player or platforms, because it has complete control after objects added to your game.
 
 ## Example use cases
-- Create a simple platformer where a player collect items and avoids enemies.
-- Make area with different types of platforms (some of them can work like trampolines, doors, teleports or have counters of times you can hit them) - player's goal will be to make it to finish platform; you can add damage effect from falling with huge speed (player.physics.vy)
+- Create a simple platformer where a player collect items and avoids enemies; then, make it more interesting by implementing fight logic (player can increase it's strenght by finding weapons and kill weaker enemies)
+- Make area with different types of platforms (some of them can work like trampolines, doors, teleports or have counters of times you can hit them) - player's goal will be to make it to finish platform; you can add damage effect from falling with huge speed (`player.physics.vy`)
 - Create 2d labirynth with creatures that patrol specific paths and react to player actions - use flying mode to have "bird's-eye view impression
-- Use Game::action_after and Game::action_before, to automatically move platforms from up to down and generate new ones (like in Icy Tower); you will also need to set bottom of screen as "deadly point" for player.
+- Use `Game::action_after` and `Game::action_before`, to automatically move platforms from up to down and generate new ones (like in Icy Tower); you will also need to set bottom of screen as "deadly point" for player.
 
 ## Getting Started
 ### Prerequisites
