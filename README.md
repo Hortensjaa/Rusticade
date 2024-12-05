@@ -21,7 +21,6 @@ Each object in the game has the following components:
    - Default attributes:
      - `hp`: Health points. If it drops to 0, the game ends.
      - `score`: Determines the player's win condition if a target score is set in the `Config`.
-   - Physics and graphics are customizable.
 
 2. **Platform**:
    - Static objects with barriers.
@@ -56,7 +55,7 @@ Each object in the game has the following components:
 ## Example use cases
 - Create a simple platformer where a player collect items and avoids enemies; then, make it more interesting by implementing fight logic (player can increase it's strenght by finding weapons and kill weaker enemies)
 - Make area with different types of platforms (some of them can work like trampolines, doors, teleports or have counters of times you can hit them) - player's goal will be to make it to finish platform; you can add damage effect from falling with huge speed (`player.physics.vy`)
-- Create 2d labirynth with creatures that patrol specific paths and react to player actions - use flying mode to have "bird's-eye view impression
+- Create 2d labirynth with creatures that patrol specific paths and react to player actions - use flying mode to have "bird's-eye view" impression
 - Use `Game::action_after` and `Game::action_before`, to automatically move platforms from up to down and generate new ones (like in Icy Tower); you will also need to set bottom of screen as "deadly point" for player.
 
 ## Getting Started
