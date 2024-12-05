@@ -69,6 +69,7 @@ pub fn main() -> GameResult {
 
     // platforms don't have initiallised moveset like creatures, but we can add them move logic
     let mut moving_platform = Platform::new(350.0, config.screen_height - 100.0, 20.0, 100.0);
+    moving_platform.set_barrier(Right, true);
     moving_platform.set_action(Left, Box::new(|p: &mut Platform, _: &mut Player| {
         p.x += 10.0;
         Ok(println!("Im moving!: {} {}", p.x, p.y))
