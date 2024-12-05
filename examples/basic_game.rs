@@ -91,18 +91,19 @@ pub fn main() -> GameResult {
     let creature1_moves = vec![(0.0, -50.0), (-100.0, 0.0), (0.0, 50.0), (100.0, 0.0)];
     let creature1 = Creature::new(
         600.0, config.screen_height / 2.0, 50.0, 50.0, creature1_moves, 5.0, Box::new(|_: &mut Creature, p: &mut Player| {
-        p.hp -= 5.0;
-        println!("Ouch, this creature bit me - good thing it's gone");
-        Ok(false)
+        println!("Why did you hit me??");
+        p.physics.vx = - p.physics.vx;
+        p.physics.vy = - p.physics.vy;
+        Ok(true)
     }));
 
     // this creature will hit player and change his move direction
     let creature2_moves = vec![(100.0, 50.0), (-100.0, -50.0)];
     let creature2 = Creature::new(200.0, 300.0, 20.0, 20.0, creature2_moves, 3.0, 
-        Box::new(|_: &mut Creature,_p: &mut Player| {
-        println!("Why did you hit me??");
-        _p.physics.vx -= 5.0;
-        Ok(true)
+        Box::new(|_: &mut Creature,p: &mut Player| {
+        p.hp -= 5.0;
+        println!("Ouch, this creature bit me - good thing it's gone");
+        Ok(false)
     }));
 
     // creature also can not move (or can start moving after trigger)
