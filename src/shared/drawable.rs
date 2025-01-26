@@ -28,7 +28,7 @@ pub trait DrawableClass {
         }
     }
 
-    fn load_image_from_file(&mut self, ctx: &mut Context, image_path: &str) -> Result<(), GameError> {
+    fn set_image_from_file(&mut self, ctx: &mut Context, image_path: &str) -> Result<(), GameError> {
         let image = Image::from_path(ctx, image_path)?;
         self.set_image(image);
         Ok(())

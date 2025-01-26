@@ -14,6 +14,11 @@ impl Player {
         self.handle_item_collisions(items)?;
         self.handle_creature_collisions(creatures)?;
         self.clamp_position();
+        self.graphics.time_since_last_frame += 1.0/60.0;
+        if self.graphics.time_since_last_frame > self.graphics.frame_time {
+            self.graphics.time_since_last_frame = 0.0;
+            self.graphics.current_frame += 1;
+        }
         Ok(())
     }
     

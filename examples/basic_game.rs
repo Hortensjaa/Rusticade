@@ -2,7 +2,6 @@ use std::sync::Arc;
 use ggez::{event, GameResult};
 
 use rusticade::shared::customisable::Customisable;
-use rusticade::shared::drawable::DrawableClass;
 use rusticade::{create_game_context, create_creature, create_player};
 use rusticade::creatures::creature::Creature;
 use rusticade::objects::{item::Item, platform::Platform};
@@ -12,11 +11,6 @@ use rusticade::game::game::Game;
 
 
 pub fn main() -> GameResult {
-    // function that will be used in every iteration of game loop
-    let wind_from_west = |game: &mut Game|{
-        game.player.physics.x += 1.0; 
-        Ok(())
-    };
 
     // configuration
     let config = Arc::new(Config::default());
@@ -25,9 +19,11 @@ pub fn main() -> GameResult {
     // creating player
     let mut player = create_player!(200.0, config.screen_height - 50.0, config.clone());
     // modifying player
-    player.physics.speed = 5.0;
-    player.physics.jump = 12.0;
-    if let Err(e) = player.load_image_from_file(&mut ctx, "/nyan.png") {
+    player.physics.h = 100.0;
+    player.physics.w = 100.0;
+    player.physics.speed = 2.0;
+    player.physics.jump = 10.0;
+    if let Err(e) = player.load_graphics(&mut ctx) {
         println!("{}", e);
         return Err(e);
     } else {
@@ -131,8 +127,6 @@ pub fn main() -> GameResult {
     game.add_creature(creature1);
     game.add_creature(creature2);
     game.add_creature(creature3);
-
-    game.action_before = Some(Box::new(wind_from_west)); // this action will happen every time at the beginning of game loop
 
     event::run(ctx, event_loop, game)
 }

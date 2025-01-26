@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
+use ggez::{Context, GameError};
+
 use crate::shared::{collidable::Collidable, config::Config, customisable::Customisable};
 
 use super::{player_graphics::PlayerGraphics, player_physics::PlayerPhysics};
@@ -41,6 +43,9 @@ impl Player {
         &self.config
     }
 
+    pub fn load_graphics(&mut self, ctx: &mut Context) -> Result<(), GameError> {
+        self.graphics.load_graphics(ctx)
+    }
 }
 
 impl Default for Player {

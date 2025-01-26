@@ -29,8 +29,8 @@ impl Default for PlayerPhysics {
             vy: 0.0,
             on_ground: false,
             attacked: false,
-            speed: 100.0,
-            jump: 400.0,
+            speed: 5.0,
+            jump: 12.0,
         }
     }
 }
